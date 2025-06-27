@@ -1,0 +1,204 @@
+/* Styles für die Tacho/Ampel-Visualisierung */
+
+.project-status-header {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    border-left: 4px solid #4361ee;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.project-status-header h3 {
+    margin: 0;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.gauge-container {
+    margin: 30px auto;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+}
+
+.gauge-meter {
+    height: 30px;
+    border-radius: 15px;
+    background: linear-gradient(to right, #F44336, #FFC107, #4CAF50);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.gauge-pointer {
+    position: absolute;
+    width: 2px;
+    height: 40px;
+    background-color: #333;
+    top: -5px;
+    transform-origin: bottom center;
+    transition: left 0.5s ease;
+    z-index: 2;
+    /* Vertikaler Strich für die exakte Position */
+    box-shadow: 0 0 3px rgba(0,0,0,0.5);
+}
+
+.gauge-marker {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.gauge-marker span {
+    font-size: 12px;
+    color: #555;
+}
+
+.gauge-value {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 4px;
+    padding: 5px 10px;
+    display: inline-block;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.gauge-uncertainty {
+    position: absolute;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 1px dashed #666;
+    top: 0;
+    z-index: 1;
+}
+
+/* Ampel-Farben für die Module */
+.status-indicator {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.status-red {
+    background-color: #F44336;
+}
+
+.status-yellow {
+    background-color: #FFC107;
+}
+
+.status-green {
+    background-color: #4CAF50;
+}
+
+/* Tooltip Styles */
+.tooltip {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 100;
+    max-width: 300px;
+    font-size: 14px;
+}
+
+.tooltip-trigger {
+    cursor: pointer;
+    color: #4361ee;
+    margin-left: 5px;
+}
+
+/* Action Recommendations Styles */
+.action-recommendations {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 25px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.action-recommendations h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 18px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* Detail-Box Styles */
+.detail-box {
+    display: none;
+    background-color: #f5f5f5;
+    border-left: 3px solid #4361ee;
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.detail-item .check-icon {
+    color: #4CAF50;
+    margin-right: 8px;
+}
+
+.detail-item .cross-icon {
+    color: #F44336;
+    margin-right: 8px;
+}
+
+.detail-recommendation {
+    margin-top: 15px;
+    font-style: italic;
+    color: #555;
+}
+
+/* Bewertungsmodule Tabelle */
+.assessment-modules {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.assessment-modules th,
+.assessment-modules td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.assessment-modules th {
+    background-color: #f9f9f9;
+    font-weight: 600;
+}
+
+.assessment-modules tr:hover {
+    background-color: #f5f5f5;
+}
+
+.key-info {
+    font-size: 14px;
+    color: #555;
+}

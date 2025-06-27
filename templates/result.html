@@ -1,0 +1,423 @@
+{% extends "base.html" %}
+
+{% block title %}Ergebnis - effic.io{% endblock %}
+
+{% block additional_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='result-badges.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='result-sections.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='result-header.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='result-gauge.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='kpi-score-indicator.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='technical-details.css') }}">
+{% endblock %}
+
+{% block additional_head %}
+<script src="{{ url_for('static', filename='result-gauge.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+            <div class="result-header">
+                <a href="/" class="back-link">Zurück</a>
+            </div>
+            
+            <h2>Ergebnis der Effizienzanalyse</h2>
+            
+            <div class="result-content">
+                <!-- Project Status Header -->
+                <div class="project-status-header">
+                    <h3>Projekt Status: 
+                        <span style="color: {% if total_score >= 0.7 %}#4CAF50{% elif total_score >= 0.4 %}#FFC107{% else %}#F44336{% endif %}">
+                            {% if total_score >= 0.7 %}Gut{% elif total_score >= 0.4 %}Mittel{% else %}Schlecht{% endif %}
+                        </span>
+                    </h3>
+                </div>
+                
+                <!-- Gauge Visualization -->
+                <div class="gauge-container">
+                    <div class="gauge-meter">
+                        <div class="gauge-pointer" data-score="{{ total_score }}"></div>
+                        <div class="gauge-uncertainty"></div>
+                    </div>
+                    <div class="gauge-marker">
+                        <span>0.0</span>
+                        <span>0.5</span>
+                        <span>1.0</span>
+                    </div>
+                    <div class="gauge-value">{{ "%.2f"|format(total_score) }}</div>
+                </div>
+                
+                <div class="result-interpretation">
+                    {% if total_score >= 0.7 %}
+                        <p><strong>Gut!</strong> Dieses Projekt hat ein hervorragendes Potenzial und sollte priorisiert werden.</p>
+                    {% elif total_score >= 0.4 %}
+                        <p><strong>Mittel.</strong> Dieses Projekt zeigt solides Potenzial mit einem ausgewogenen Verhältnis von Aufwand und Nutzen.</p>
+                    {% else %}
+                        <p><strong>Schlecht.</strong> Dieses Projekt hat ein begrenztes Potenzial und sollte strategisch neu ausgerichtet werden.</p>
+                    {% endif %}
+                </div>
+                
+                <div class="dynamic-weights">
+                    <h4>Angewandte Gewichtung:</h4>
+                    <ul>
+                        <li>KPI-Score: <strong>{{ calculation.weights.kpi_weight * 100 }}%</strong></li>
+                        <li>Technik-Score: <strong>{{ calculation.weights.technik_weight * 100 }}%</strong></li>
+                        <li>Nutzerbereitschafts-Score: <strong>{{ calculation.weights.user_weight * 100 }}%</strong></li>
+                    </ul>
+                    <p><em>{{ calculation.weights.weight_explanation }}</em></p>
+                </div>
+                
+                <!-- Action Recommendations -->
+                <div class="action-recommendations">
+                    <h4>Empfohlene Maßnahmen:</h4>
+                    <div class="detail-box" style="display: block;">
+                        {% if total_score >= 0.8 %}
+                            <div class="detail-item"><span class="check-icon">✓</span> Projekt für Umsetzung freigeben</div>
+                            <div class="detail-item"><span class="check-icon">✓</span> Ressourcen priorisieren</div>
+                            <div class="detail-item"><span class="check-icon">✓</span> Implementierungsplan erstellen</div>
+                        {% elif total_score >= 0.5 %}
+                            <div class="detail-item"><span class="check-icon">✓</span> Optimierungspotenziale identifizieren</div>
+                            <div class="detail-item"><span class="check-icon">✓</span> Technische Reife verbessern</div>
+                            <div class="detail-item"><span class="check-icon">✓</span> KPIs überprüfen</div>
+                        {% else %}
+                            <div class="detail-item"><span class="cross-icon">✗</span> Projektkonzept überarbeiten</div>
+                            <div class="detail-item"><span class="cross-icon">✗</span> Technische Machbarkeit prüfen</div>
+                            <div class="detail-item"><span class="cross-icon">✗</span> Strategische Ausrichtung anpassen</div>
+                        {% endif %}
+                        <div class="detail-recommendation">
+                            {% if total_score >= 0.8 %}
+                                Dieses Projekt hat eine hohe Erfolgswahrscheinlichkeit und sollte zeitnah umgesetzt werden.
+                            {% elif total_score >= 0.5 %}
+                                Mit gezielten Verbesserungen kann dieses Projekt sein volles Potenzial entfalten.
+                            {% else %}
+                                Eine grundlegende Überarbeitung ist empfehlenswert, bevor weitere Ressourcen investiert werden.
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="evaluation-details">
+                    <h3>Bewertungsdetails:</h3>
+                    
+                    <!-- Assessment Modules Table -->
+                    <h4>Bewertungsmodule</h4>
+                    <table class="assessment-modules">
+                        <thead>
+                            <tr>
+                                <th>Modul</th>
+                                <th>Score</th>
+                                <th>Status</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Technical Assessment Module -->
+                            <tr>
+                                <td>
+                                    <strong>Technische Bewertung</strong>
+                                    <div class="key-info">Technischer Reifegrad des Projekts</div>
+                                </td>
+                                <td>{{ "%.2f"|format(technik_score) }}</td>
+                                <td>
+                                    <span class="status-indicator module-status {% if technik_score >= 0.8 %}status-green{% elif technik_score >= 0.5 %}status-yellow{% else %}status-red{% endif %}" data-score="{{ technik_score }}"></span>
+                                    {% if technik_score >= 0.8 %}Hoch{% elif technik_score >= 0.5 %}Mittel{% else %}Niedrig{% endif %}
+                                </td>
+                                <td>
+                                    <button class="detail-toggle" data-target="technik-details">Details anzeigen</button>
+                                </td>
+                            </tr>
+                            
+                            <!-- KPI Assessment Module -->
+                            <tr>
+                                <td>
+                                    <strong>KPI-Bewertung</strong>
+                                    <div class="key-info">Strategische Relevanz und Wertbeitrag</div>
+                                </td>
+                                <td>{{ "%.2f"|format(kpi_score) }}</td>
+                                <td>
+                                    <span class="status-indicator module-status {% if kpi_score >= 0.8 %}status-green{% elif kpi_score >= 0.5 %}status-yellow{% else %}status-red{% endif %}" data-score="{{ kpi_score }}"></span>
+                                    {% if kpi_score >= 0.8 %}Hoch{% elif kpi_score >= 0.5 %}Mittel{% else %}Niedrig{% endif %}
+                                </td>
+                                <td>
+                                    <button class="detail-toggle" data-target="kpi-details">Details anzeigen</button>
+                                </td>
+                            </tr>
+                            
+                            <!-- User Readiness Assessment Module -->
+                            <tr>
+                                <td>
+                                    <strong>Nutzerbereitschafts-Bewertung</strong>
+                                    <div class="key-info">Bereitschaft der Organisation für Technologie-Adoption</div>
+                                </td>
+                                <td>{{ "%.2f"|format(user_score) }}</td>
+                                <td>
+                                    <span class="status-indicator module-status {% if user_score >= 0.8 %}status-green{% elif user_score >= 0.5 %}status-yellow{% else %}status-red{% endif %}" data-score="{{ user_score }}"></span>
+                                    {% if user_score >= 0.8 %}Hoch{% elif user_score >= 0.5 %}Mittel{% else %}Niedrig{% endif %}
+                                </td>
+                                <td>
+                                    <button class="detail-toggle" data-target="user-details">Details anzeigen</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <!-- Technical Assessment Details Box -->
+                    <div id="technik-details" class="detail-box">
+                        <h5>Technischer Reifegrad:</h5>
+                        <div class="detail-item">
+                            <strong>
+                                {% if technik_score >= 0.9 %}
+                                    Produktionsreif
+                                {% elif technik_score >= 0.8 %}
+                                    Integrationsphase
+                                {% elif technik_score >= 0.6 %}
+                                    Prototyp-Phase
+                                {% elif technik_score >= 0.4 %}
+                                    Validierungsphase
+                                {% elif technik_score >= 0.1 %}
+                                    Konzeptphase
+                                {% else %}
+                                    Ideenphase
+                                {% endif %}
+                            </strong>
+                        </div>
+                        
+                        <!-- Technical Evaluation Details -->
+                        <div class="technical-details">
+                            <h6>Technische Bewertungskriterien:</h6>
+                            <ul class="tech-criteria-list">
+                                <li>
+                                    <span class="criteria-label">Konzeptstatus:</span>
+                                    <span class="criteria-value">
+                                        {% if technik_details.concept_status == 'nein' %}
+                                            Kein Konzept
+                                        {% elif technik_details.concept_status == 'skizzen' %}
+                                            Skizzen/Ideen
+                                        {% elif technik_details.concept_status == 'konzept' %}
+                                            Ausgearbeitetes Konzept
+                                        {% else %}
+                                            {{ technik_details.concept_status }}
+                                        {% endif %}
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="criteria-label">Validierung:</span>
+                                    <span class="criteria-value">
+                                        {% if technik_details.validation == 'nein' %}
+                                            Keine Validierung
+                                        {% elif technik_details.validation == 'intern' %}
+                                            Interne Validierung
+                                        {% elif technik_details.validation == 'extern' %}
+                                            Externe Validierung
+                                        {% else %}
+                                            {{ technik_details.validation }}
+                                        {% endif %}
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="criteria-label">Prototypstatus:</span>
+                                    <span class="criteria-value">
+                                        {% if technik_details.prototype == 'nein' %}
+                                            Kein Prototyp
+                                        {% elif technik_details.prototype == 'entwicklung' %}
+                                            In Entwicklung
+                                        {% elif technik_details.prototype == 'test' %}
+                                            In Testphase
+                                        {% else %}
+                                            {{ technik_details.prototype }}
+                                        {% endif %}
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="criteria-label">Integration:</span>
+                                    <span class="criteria-value">
+                                        {% if technik_details.integration == 'nein' %}
+                                            Keine Integration
+                                        {% elif technik_details.integration == 'schnittstellen' %}
+                                            Schnittstellen definiert
+                                        {% elif technik_details.integration == 'teilweise' %}
+                                            Teilweise integriert
+                                        {% elif technik_details.integration == 'vollständig' %}
+                                            Vollständig integriert
+                                        {% else %}
+                                            {{ technik_details.integration }}
+                                        {% endif %}
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="criteria-label">Betriebsreife:</span>
+                                    <span class="criteria-value">
+                                        {% if technik_details.maturity == 'nein' %}
+                                            Keine Betriebsreife
+                                        {% elif technik_details.maturity == 'erste' %}
+                                            Erste Anwendungen
+                                        {% elif technik_details.maturity == 'produktiv' %}
+                                            Produktiv im Einsatz
+                                        {% else %}
+                                            {{ technik_details.maturity }}
+                                        {% endif %}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="detail-recommendation">
+                            {% if technik_score >= 0.8 %}
+                                Das Projekt ist technisch ausgereift und kann implementiert werden.
+                            {% elif technik_score >= 0.5 %}
+                                Das Projekt benötigt noch technische Verfeinerungen vor der vollständigen Implementierung.
+                            {% else %}
+                                Das Projekt befindet sich in einem frühen technischen Stadium und erfordert weitere Entwicklung.
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- KPI Assessment Details Box -->
+                    <div id="kpi-details" class="detail-box">
+                        <h5>KPI-Bewertung:</h5>
+                        <div class="detail-item">
+                            <strong>
+                                {% if kpi_score >= 0.9 %}
+                                    Hervorragender Wertbeitrag
+                                {% elif kpi_score >= 0.8 %}
+                                    Hoher Wertbeitrag
+                                {% elif kpi_score >= 0.6 %}
+                                    Guter Wertbeitrag
+                                {% elif kpi_score >= 0.4 %}
+                                    Moderater Wertbeitrag
+                                {% elif kpi_score >= 0.1 %}
+                                    Geringer Wertbeitrag
+                                {% else %}
+                                    Minimaler Wertbeitrag
+                                {% endif %}
+                            </strong>
+                        </div>
+                        <div class="detail-recommendation">
+                            {% if kpi_score >= 0.8 %}
+                                Das Projekt hat ein hervorragendes KPI-Potenzial und sollte priorisiert werden.
+                            {% elif kpi_score >= 0.5 %}
+                                Das Projekt zeigt solides KPI-Potenzial mit einem ausgewogenen Verhältnis von Aufwand und Nutzen.
+                            {% else %}
+                                Das Projekt hat ein begrenztes KPI-Potenzial und sollte strategisch neu ausgerichtet werden.
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- User Readiness Assessment Details Box -->
+                    <div id="user-details" class="detail-box">
+                        <h5>Nutzerbereitschafts-Bewertung:</h5>
+                        <div class="detail-item">
+                            <strong>
+                                {{ user_readiness_details.color_code }} {{ user_readiness_details.readiness_level }}
+                            </strong>
+                        </div>
+                        
+                        <!-- User Readiness Evaluation Details -->
+                        <div class="user-readiness-details">
+                            <h6>Nutzerbereitschafts-Bewertungskriterien:</h6>
+                            <ul class="user-criteria-list">
+                                <li>
+                                    <span class="criteria-label">Leistungserwartung:</span>
+                                    <span class="criteria-value">
+                                        {% if user_readiness_details.performance_expectancy == 'yes' %}
+                                            Ja (1.0)
+                                        {% elif user_readiness_details.performance_expectancy == 'partially' %}
+                                            Teilweise (0.5)
+                                        {% elif user_readiness_details.performance_expectancy == 'no' %}
+                                            Nein (0.0)
+                                        {% else %}
+                                            {{ user_readiness_details.performance_expectancy }}
+                                        {% endif %}
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="criteria-label">Aufwandserwartung:</span>
+                                    <span class="criteria-value">
+                                        {% if user_readiness_details.effort_expectancy == 'yes' %}
+                                            Ja (1.0)
+                                        {% elif user_readiness_details.effort_expectancy == 'partially' %}
+                                            Teilweise (0.5)
+                                        {% elif user_readiness_details.effort_expectancy == 'no' %}
+                                            Nein (0.0)
+                                        {% else %}
+                                            {{ user_readiness_details.effort_expectancy }}
+                                        {% endif %}
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="criteria-label">Sozialer Einfluss:</span>
+                                    <span class="criteria-value">
+                                        {% if user_readiness_details.social_influence == 'yes' %}
+                                            Ja (1.0)
+                                        {% elif user_readiness_details.social_influence == 'partially' %}
+                                            Teilweise (0.5)
+                                        {% elif user_readiness_details.social_influence == 'no' %}
+                                            Nein (0.0)
+                                        {% else %}
+                                            {{ user_readiness_details.social_influence }}
+                                        {% endif %}
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="criteria-label">Unterstützende Bedingungen:</span>
+                                    <span class="criteria-value">
+                                        {% if user_readiness_details.facilitating_conditions == 'yes' %}
+                                            Ja (1.0)
+                                        {% elif user_readiness_details.facilitating_conditions == 'partially' %}
+                                            Teilweise (0.5)
+                                        {% elif user_readiness_details.facilitating_conditions == 'no' %}
+                                            Nein (0.0)
+                                        {% else %}
+                                            {{ user_readiness_details.facilitating_conditions }}
+                                        {% endif %}
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="criteria-label">Vertrauen in Technologie:</span>
+                                    <span class="criteria-value">
+                                        {% if user_readiness_details.trust_in_tech == 'yes' %}
+                                            Ja (1.0)
+                                        {% elif user_readiness_details.trust_in_tech == 'partially' %}
+                                            Teilweise (0.5)
+                                        {% elif user_readiness_details.trust_in_tech == 'no' %}
+                                            Nein (0.0)
+                                        {% else %}
+                                            {{ user_readiness_details.trust_in_tech }}
+                                        {% endif %}
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="criteria-label">Wahrgenommene Bedrohung (invertiert):</span>
+                                    <span class="criteria-value">
+                                        {% if user_readiness_details.perceived_threat == 'no' %}
+                                            Nein (1.0)
+                                        {% elif user_readiness_details.perceived_threat == 'partially' %}
+                                            Teilweise (0.5)
+                                        {% elif user_readiness_details.perceived_threat == 'yes' %}
+                                            Ja (0.0)
+                                        {% else %}
+                                            {{ user_readiness_details.perceived_threat }}
+                                        {% endif %}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="detail-recommendation">
+                            <p>{{ user_readiness_details.interpretation }}</p>
+                            {% if user_readiness_details.recommendation %}
+                                <p><strong>Empfehlung:</strong> {{ user_readiness_details.recommendation }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <a href="/" class="button">Neue Berechnung</a>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('saved_calculations') }}" class="button secondary">Gespeicherte Berechnungen</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="button secondary">Anmelden zum Speichern</a>
+                {% endif %}
+            </div>
+{% endblock %}

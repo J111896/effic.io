@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block title %}Nutzerbereitschaft - effic.io{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="technik-header">
+        <div class="technik-header-content">
+            <div class="technik-header-text">
+                <h2>Nutzerbereitschafts-Bewertung</h2>
+                <p class="technik-description">✨ "Wie bereit ist Ihr Team, diese Technologie in der Praxis einzusetzen?"</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="technik-box">
+        <form id="userReadinessForm" action="{{ url_for('process_user_readiness') }}" method="POST">
+            <div class="all-questions">
+                <!-- Question 1 -->
+                <div class="question-item question-box">
+                    <div class="question-header">
+                        <h4>1. Leistungserwartung</h4>
+                        <p>Nehmen die Nutzer die Technologie als nützlich für ihre komplexen Aufgaben wahr?</p>
+                    </div>
+                    <div class="radio-container">
+                        <label class="radio-label">
+                            <input type="radio" id="pe_yes" name="performance_expectancy" value="yes" required>
+                            <span>Ja</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" id="pe_partially" name="performance_expectancy" value="partially">
+                            <span>Teilweise</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" id="pe_no" name="performance_expectancy" value="no">
+                            <span>Nein</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Question 2 -->
+                <div class="question-item question-box">
+                    <div class="question-header">
+                        <h4>2. Aufwandserwartung</h4>
+                        <p>Können Nutzer Aufgaben erledigen, ohne Hilfe zu benötigen?</p>
+                    </div>
+                    <div class="radio-container">
+                        <label class="radio-label">
+                            <input type="radio" id="ee_yes" name="effort_expectancy" value="yes" required>
+                            <span>Ja</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" id="ee_partially" name="effort_expectancy" value="partially">
+                            <span>Teilweise</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" id="ee_no" name="effort_expectancy" value="no">
+                            <span>Nein</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Question 3 -->
+                <div class="question-item question-box">
+                    <div class="question-header">
+                        <h4>3. Sozialer Einfluss</h4>
+                        <p>Unterstützen oder empfehlen Kollegen oder Führungskräfte aktiv die Nutzung?</p>
+                    </div>
+                    <div class="radio-container">
+                        <label class="radio-label">
+                            <input type="radio" id="si_yes" name="social_influence" value="yes" required>
+                            <span>Ja</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" id="si_partially" name="social_influence" value="partially">
+                            <span>Teilweise</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" id="si_no" name="social_influence" value="no">
+                            <span>Nein</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Question 4 -->
+                <div class="question-item question-box">
+                    <div class="question-header">
+                        <h4>4. Unterstützende Bedingungen</h4>
+                        <p>Sind Einarbeitung, Support und IT-Infrastruktur verfügbar und werden genutzt?</p>
+                    </div>
+                    <div class="radio-container">
+                        <label class="radio-label">
+                            <input type="radio" id="fc_yes" name="facilitating_conditions" value="yes" required>
+                            <span>Ja</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" id="fc_partially" name="facilitating_conditions" value="partially">
+                            <span>Teilweise</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" id="fc_no" name="facilitating_conditions" value="no">
+                            <span>Nein</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Question 5 -->
+                <div class="question-item question-box">
+                    <div class="question-header">
+                        <h4>5. Vertrauen in Technologie</h4>
+                        <p>Würden Nutzer dem System in einer kritischen Arbeitssituation vertrauen?</p>
+                    </div>
+                    <div class="radio-container">
+                        <label class="radio-label">
+                            <input type="radio" id="tt_yes" name="trust_in_tech" value="yes" required>
+                            <span>Ja</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" id="tt_partially" name="trust_in_tech" value="partially">
+                            <span>Teilweise</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" id="tt_no" name="trust_in_tech" value="no">
+                            <span>Nein</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Question 6 -->
+                <div class="question-item question-box">
+                    <div class="question-header">
+                        <h4>6. Wahrgenommene Bedrohung (invertiert)</h4>
+                        <p>Gibt es spürbaren Widerstand, Angst oder Fluktuation durch die Technologie?</p>
+                        <p><small>(Hinweis: Bei dieser Frage wird die Bewertung invertiert: 'Nein' = 1.0, 'Teilweise' = 0.5, 'Ja' = 0.0)</small></p>
+                    </div>
+                    <div class="radio-container">
+                        <label class="radio-label">
+                            <input type="radio" id="pt_yes" name="perceived_threat" value="yes" required>
+                            <span>Ja</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" id="pt_partially" name="perceived_threat" value="partially">
+                            <span>Teilweise</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" id="pt_no" name="perceived_threat" value="no">
+                            <span>Nein</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="navigation-buttons">
+                    <a href="/" class="back-button">Zurück</a>
+                    <button type="submit" class="next-button">Zum effic.io Score</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .all-questions {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .question-item {
+        margin-bottom: 10px;
+    }
+    
+    .navigation-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    
+    .back-button {
+        background-color: #f0f0f0;
+        color: #333;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        display: inline-block;
+    }
+    
+    /* Using global next-button style instead of custom submit-button style */
+</style>
+{% endblock %}

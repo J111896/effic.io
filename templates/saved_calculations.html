@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gespeicherte Berechnungen - effic.io</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="card result-card">
+            <div class="header-row">
+                <h1>effic.io</h1>
+                <a href="/" class="about-link">Zurück</a>
+            </div>
+            
+            <div class="kpi-box">
+                <h3>Gespeicherte Berechnungen</h3>
+            </div>
+            
+            {% if error %}
+            <div class="error-message">
+                {{ error }}
+            </div>
+            {% endif %}
+            
+            {% if message %}
+            <div class="info-message">
+                {{ message }}
+            </div>
+            {% endif %}
+            
+            {% if calculations %}
+                {% for calc in calculations %}
+                <div class="saved-calculation">
+                    <div class="calculation-header">
+                        <span class="calculation-date">{{ calc.datum }}</span>
+                        <span class="calculation-branche">{{ calc.branche }}</span>
+                        <div class="score-display" style="background-color: 
+                            {% if calc.score >= 0.8 %}#4CAF50{% elif calc.score >= 0.5 %}#FFC107{% else %}#F44336{% endif %};">
+                            {{ "%.2f"|format(calc.score) }}
+                        </div>
+                    </div>
+                    <div class="calculation-comment">
+                        <strong>Kommentar:</strong> {{ calc.kommentar or "Kein Kommentar" }}
+                    </div>
+                    <div class="calculation-details">
+                        <strong>KPI-Werte:</strong> {{ calc.kpi_values }}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="info-message">
+                    Keine gespeicherten Berechnungen gefunden.
+                </div>
+            {% endif %}
+            
+            <a href="/" class="button">Zur Startseite</a>
+        </div>
+    </div>
+</body>
+</html>

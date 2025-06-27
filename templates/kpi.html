@@ -1,0 +1,369 @@
+{% extends "base.html" %}
+
+{% block title %}KPI-Bewertung - effic.io{% endblock %}
+
+{% block additional_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='kpi-points.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='slider-answers.css') }}">
+{% endblock %}
+
+{% block content %}
+            <div class="technik-header">
+                <div class="technik-header-content">
+                    <div class="technik-header-text">
+                        <h2>KPI-Bewertung</h2>
+                        <p class="technik-description">Bewerten Sie die strategische Relevanz und KPI-Verbesserungen Ihres KI-Projekts.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="technik-box">
+                <form action="{{ url_for('process_kpi') }}" method="POST" id="kpiForm">
+                    <div class="question-container">
+                        <!-- Strategische Relevanz -->
+                        <div class="question-item question-box">
+                            <div class="question-header">
+                                <h4>🥇 Frage 1: Welche strategische Relevanz hat das Projekt?</h4>
+                            </div>
+                            <div class="radio-container">
+                                <label class="radio-label">
+                                    <input type="radio" name="strategic_relevance" value="operativ" required>
+                                    <span>🔘 Operativ (taktisch, kurzfristig)</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="strategic_relevance" value="wachstum" required>
+                                    <span>🚀 Wachstumstreiber (strategisch)</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="strategic_relevance" value="transformativ" required>
+                                    <span>🧭 Zukunftsrelevant / Transformativ (Gamechanger)</span>
+                                </label>
+                            </div>
+                            <div class="tool-tip">
+                                <p>💬 Tool-Tipp: Projekte mit hoher strategischer Relevanz rechtfertigen meist auch höhere Investitionen.</p>
+                            </div>
+                        </div>
+                        
+                        
+                        <!-- KPI-Verbesserung -->
+                        <div class="question-item question-box">
+                            <div class="question-header">
+                                <h4>🥈 Frage 2: Wie stark verbessert die Idee die Ziel-KPIs?</h4>
+                            </div>
+                            <div class="kpi-selection">
+                                <p>➕ Wählen Sie bis zu 3 relevante KPIs, die durch das Projekt beeinflusst werden.</p>
+                                <div class="kpi-checkboxes">
+                                    <label class="kpi-checkbox">
+                                        <input type="checkbox" name="kpi_checkbox" value="umsatz" class="kpi-select-box">
+                                        <span>Umsatz</span>
+                                    </label>
+                                    <label class="kpi-checkbox">
+                                        <input type="checkbox" name="kpi_checkbox" value="kosten" class="kpi-select-box">
+                                        <span>Kosten</span>
+                                    </label>
+                                    <label class="kpi-checkbox">
+                                        <input type="checkbox" name="kpi_checkbox" value="durchlaufzeit" class="kpi-select-box">
+                                        <span>Durchlaufzeit</span>
+                                    </label>
+                                    <label class="kpi-checkbox">
+                                        <input type="checkbox" name="kpi_checkbox" value="co2" class="kpi-select-box">
+                                        <span>CO₂</span>
+                                    </label>
+                                    <label class="kpi-checkbox">
+                                        <input type="checkbox" name="kpi_checkbox" value="kundenbindung" class="kpi-select-box">
+                                        <span>Kundenbindung</span>
+                                    </label>
+                                    <label class="kpi-checkbox">
+                                        <input type="checkbox" name="kpi_checkbox" value="fehlerrate" class="kpi-select-box">
+                                        <span>Fehlerrate</span>
+                                    </label>
+                                </div>
+                                <div id="kpi-sliders-container">
+                                    <!-- Dynamische Slider werden hier per JavaScript eingefügt -->
+                                    <div class="no-kpi-selected">Bitte wählen Sie mindestens einen KPI aus.</div>
+                                </div>
+                                <input type="hidden" name="selected_kpis" id="selectedKpisInput" value="[]">
+                            </div>
+                        </div>
+                        
+                        <!-- Hier wurde die Frage zur Investitionsanpassung entfernt -->
+                    </div>
+                    
+                    <div class="navigation-buttons">
+                        <a href="{{ url_for('technik_bewertung') }}" class="back-button">Zurück</a>
+                        <button type="submit" class="next-button">Weiter zur User-Bewertung</button>
+                    </div>
+                </form>
+            </div>
+
+    <script>
+        // KPI-Auswahl Funktionalität
+        document.addEventListener('DOMContentLoaded', function() {
+            const kpiCheckboxes = document.querySelectorAll('.kpi-select-box');
+            const kpiSlidersContainer = document.getElementById('kpi-sliders-container');
+            const selectedKpisInput = document.getElementById('selectedKpisInput');
+            const roiSlider = document.getElementById('roiSlider');
+            const roiValue = document.getElementById('roiValue');
+            const maxKPIs = 3; // Maximale Anzahl an auswählbaren KPIs
+            
+            // Speichert die ausgewählten KPIs - als globale Variable für Zugriff aus script.js
+            window.selectedKpisList = [];
+            
+            // Initialisiere das versteckte Input-Feld mit einem leeren Array
+            console.log("Initializing selectedKpisInput with empty array");
+            selectedKpisInput.value = JSON.stringify(window.selectedKpisList);
+            console.log("Initial selectedKpisInput value:", selectedKpisInput.value);
+            
+            // Aktualisiert den ROI-Wert beim Verschieben des Sliders
+            if (roiSlider) {
+                roiSlider.addEventListener('input', function() {
+                    roiValue.textContent = this.value;
+                });
+            }
+            
+            // Event-Listener für KPI-Checkboxen
+            kpiCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const kpiValue = this.value;
+                    const kpiText = this.nextElementSibling.textContent;
+                    
+                    if (this.checked) {
+                        // Prüfen, ob bereits 3 KPIs ausgewählt sind
+                        if (window.selectedKpisList.length >= maxKPIs) {
+                            // Wenn ja, die älteste Auswahl deaktivieren
+                            const oldestKPI = window.selectedKpisList.shift();
+                            document.querySelector(`.kpi-select-box[value="${oldestKPI.value}"]`).checked = false;
+                            // Den entsprechenden Slider entfernen
+                            const sliderToRemove = document.getElementById(`kpi-slider-${oldestKPI.value}`);
+                            if (sliderToRemove) {
+                                sliderToRemove.remove();
+                            }
+                        }
+                        
+                        // Neuen KPI hinzufügen mit explizitem Score 0.5 (Position 3)
+                        // Standardwert ist Position 3, was einem normalisierten Wert von 0.5 entspricht
+                        const defaultPosition = 3;
+                        const normalizedScore = normalizePositionToScore(defaultPosition);
+                        
+                        window.selectedKpisList.push({
+                            value: kpiValue,
+                            text: kpiText,
+                            score: normalizedScore,
+                            position: defaultPosition // Speichere auch die ursprüngliche Position
+                        });
+                        
+                        console.log(`Added new KPI: ${kpiText} with default score ${normalizedScore} (position ${defaultPosition})`);
+                        
+                        
+                        // Slider für diesen KPI erstellen
+                        createKPISlider(kpiValue, kpiText);
+                        
+                        // Aktualisiere das versteckte Input-Feld
+                        updateSelectedKpisInput();
+                    } else {
+                        // KPI aus der Liste entfernen
+                        const index = window.selectedKpisList.findIndex(kpi => kpi.value === kpiValue);
+                        if (index > -1) {
+                            window.selectedKpisList.splice(index, 1);
+                        }
+                        
+                        // Slider entfernen
+                        const sliderToRemove = document.getElementById(`kpi-slider-${kpiValue}`);
+                        if (sliderToRemove) {
+                            sliderToRemove.remove();
+                        }
+                        
+                        // Aktualisiere das versteckte Input-Feld
+                        updateSelectedKpisInput();
+                    }
+                    
+                    // Hinweis anzeigen, wenn keine KPIs ausgewählt sind
+                    const noKPIMessage = document.querySelector('.no-kpi-selected');
+                    if (noKPIMessage) {
+                        noKPIMessage.style.display = window.selectedKpisList.length === 0 ? 'block' : 'none';
+                    }
+                });
+            });
+            
+            // Funktion zum Erstellen einer KPI-Punkteskala
+            function createKPISlider(kpiValue, kpiName) {
+                const sliderDiv = document.createElement('div');
+                sliderDiv.id = `kpi-slider-${kpiValue}`;
+                sliderDiv.className = 'kpi-slider-item';
+                
+                sliderDiv.innerHTML = `
+                    <div class="kpi-slider-header">
+                        <span>${kpiName}</span>
+                        <span class="kpi-value-display" id="kpi-value-${kpiValue}">3</span>
+                    </div>
+                    <div class="points-scale-container">
+                        <div class="points-scale">
+                            <div class="point-item" data-value="1">
+                                <div class="point"></div>
+                                <div class="point-label">1</div>
+                            </div>
+                            <div class="point-item" data-value="2">
+                                <div class="point"></div>
+                                <div class="point-label">2</div>
+                            </div>
+                            <div class="point-item" data-value="3">
+                                <div class="point"></div>
+                                <div class="point-label">3</div>
+                            </div>
+                            <div class="point-item" data-value="4">
+                                <div class="point"></div>
+                                <div class="point-label">4</div>
+                            </div>
+                            <div class="point-item" data-value="5">
+                                <div class="point"></div>
+                                <div class="point-label">5</div>
+                            </div>
+                        </div>
+                        <div class="scale-line"></div>
+                        <div class="scale-descriptions">
+                            <span class="scale-description-start">Kein Impact</span>
+                            <span class="scale-description-end">großer Impact</span>
+                        </div>
+                    </div>
+                `;
+                
+                // Hinweis ausblenden, wenn Punkteskala hinzugefügt wird
+                const noKPIMessage = document.querySelector('.no-kpi-selected');
+                if (noKPIMessage) {
+                    noKPIMessage.style.display = 'none';
+                }
+                
+                // Punkteskala zum Container hinzufügen
+                kpiSlidersContainer.appendChild(sliderDiv);
+                
+                // Event-Listener für die Punkte
+                const pointItems = sliderDiv.querySelectorAll('.point-item');
+                pointItems.forEach(pointItem => {
+                    pointItem.addEventListener('click', function() {
+                        // Aktiven Punkt markieren
+                        pointItems.forEach(item => item.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        const value = this.getAttribute('data-value');
+                        const valueDisplay = document.getElementById(`kpi-value-${kpiValue}`);
+                        if (valueDisplay) {
+                            valueDisplay.textContent = value;
+                        }
+                        
+                        // Aktualisiere den Score in der Liste
+                        const kpiIndex = window.selectedKpisList.findIndex(kpi => kpi.value === kpiValue);
+                        if (kpiIndex !== -1) {
+                            // Umrechnung von 1-5 auf 0-1 Skala für die Datenbank
+                            const positionValue = parseInt(value);
+                            const normalizedValue = normalizePositionToScore(positionValue);
+                            
+                            // Aktualisiere sowohl den Score als auch die Position
+                            window.selectedKpisList[kpiIndex].score = normalizedValue;
+                            window.selectedKpisList[kpiIndex].position = positionValue;
+                            
+                            console.log(`Updated KPI ${kpiValue} to position ${positionValue} with normalized score ${normalizedValue}`);
+                            
+                            updateSelectedKpisInput();
+                        }
+                    });
+                });
+                
+                // Standardmäßig Punkt 3 auswählen und den Score aktualisieren
+                const defaultPoint = sliderDiv.querySelector('.point-item[data-value="3"]');
+                if (defaultPoint) {
+                    defaultPoint.classList.add('active');
+                    
+                    // Stelle sicher, dass der Score in der Liste aktualisiert wird
+                    const kpiIndex = window.selectedKpisList.findIndex(kpi => kpi.value === kpiValue);
+                    if (kpiIndex !== -1) {
+                        // Umrechnung von 1-5 auf 0-1 Skala für die Datenbank
+                        // Verwende die Normalisierungsfunktion für Konsistenz
+                        const positionValue = parseInt(defaultPoint.getAttribute('data-value'));
+                        const normalizedValue = normalizePositionToScore(positionValue);
+                        
+                        // Aktualisiere sowohl den Score als auch die Position
+                        window.selectedKpisList[kpiIndex].score = normalizedValue;
+                        window.selectedKpisList[kpiIndex].position = positionValue;
+                        
+                        console.log(`Set default position for KPI ${kpiValue} to ${positionValue} with normalized score ${normalizedValue}`);
+                        
+                        updateSelectedKpisInput();
+                    }
+                }
+            }
+            
+            // Funktion zur Normalisierung der Position (1-5) zu einem Score (0-1)
+            function normalizePositionToScore(position) {
+                const positionValue = parseInt(position);
+                switch(positionValue) {
+                    case 1:
+                        return 0.0;  // Position 1 -> 0.0
+                    case 2:
+                        return 0.25; // Position 2 -> 0.25
+                    case 3:
+                        return 0.5;  // Position 3 -> 0.5
+                    case 4:
+                        return 0.75; // Position 4 -> 0.75
+                    case 5:
+                        return 1.0;  // Position 5 -> 1.0
+                    default:
+                        return 0.5;  // Standardwert für unbekannte Position
+                }
+            }
+            
+            // Funktion zum Aktualisieren des versteckten Input-Felds
+            function updateSelectedKpisInput() {
+                console.log("=== UPDATING SELECTED KPIS INPUT ===");
+                console.log("Selected KPIs list:", window.selectedKpisList);
+                const jsonString = JSON.stringify(window.selectedKpisList);
+                console.log("JSON string to be sent:", jsonString);
+                selectedKpisInput.value = jsonString;
+                console.log("Hidden input value set to:", selectedKpisInput.value);
+                console.log("Hidden input name:", selectedKpisInput.name);
+                console.log("=== END UPDATING SELECTED KPIS INPUT ===");
+            }
+            
+            // Form submission debugging
+            const kpiForm = document.getElementById('kpiForm');
+            if (kpiForm) {
+                kpiForm.addEventListener('submit', function(e) {
+                    // Make sure the hidden input is updated one last time before submission
+                    updateSelectedKpisInput();
+                    
+                    console.log('=== FORM SUBMISSION DEBUG ===');
+                    console.log('Form being submitted');
+                    console.log('Selected KPIs at submission:', window.selectedKpisList);
+                    console.log('Hidden input value at submission:', selectedKpisInput.value);
+                    console.log('Hidden input name:', selectedKpisInput.name);
+                    console.log('Form data:');
+                    const formData = new FormData(kpiForm);
+                    for (let [key, value] of formData.entries()) {
+                        console.log(`${key}: ${value}`);
+                    }
+                    
+                    // Additional debugging for the selected_kpis field
+                    console.log('Checking if selected_kpis is in formData:');
+                    console.log('Has selected_kpis:', formData.has('selected_kpis'));
+                    console.log('selected_kpis value:', formData.get('selected_kpis'));
+                    
+                    // If the selectedKpisList is empty, set a default empty array
+                    if (!selectedKpisInput.value || selectedKpisInput.value.trim() === '') {
+                        console.log('Setting default empty array for selected_kpis');
+                        selectedKpisInput.value = '[]';
+                    }
+                    
+                    // Double check the form has the correct input field
+                    console.log('Final check - Form elements:');
+                    for (let i = 0; i < kpiForm.elements.length; i++) {
+                        const element = kpiForm.elements[i];
+                        console.log(`Element ${i}: name=${element.name}, type=${element.type}, value=${element.value}`);
+                    }
+                    console.log('=== END FORM SUBMISSION DEBUG ===');
+                });
+            }
+                    
+                });
+        });
+
+    </script>
+{% endblock %}

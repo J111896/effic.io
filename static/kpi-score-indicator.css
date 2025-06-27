@@ -1,0 +1,67 @@
+/* KPI Score Indicator Styles */
+
+.kpi-list {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+}
+
+.kpi-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.kpi-name {
+    font-weight: 600;
+    flex: 1;
+}
+
+.kpi-value {
+    display: flex;
+    align-items: center;
+    width: 150px;
+}
+
+.kpi-score-indicator {
+    width: 100%;
+    height: 10px;
+    background-color: #e2e8f0;
+    border-radius: 5px;
+    position: relative;
+}
+
+.kpi-score-indicator::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    border-radius: 5px;
+    background-color: #4CAF50;
+}
+
+.kpi-score-indicator.position-1::before {
+    width: 20%;
+    background-color: #F44336; /* Rot */
+}
+
+.kpi-score-indicator.position-2::before {
+    width: 40%;
+    background-color: #FF9800; /* Orange */
+}
+
+.kpi-score-indicator.position-3::before {
+    width: 60%;
+    background-color: #FFEB3B; /* Gelb */
+}
+
+.kpi-score-indicator.position-4::before {
+    width: 80%;
+    background-color: #8BC34A; /* Hellgrün */
+}
+
+.kpi-score-indicator.position-5::before {
+    width: 100%;
+    background-color: #4CAF50; /* Grün */
+}

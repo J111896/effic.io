@@ -1,0 +1,43 @@
+<!-- Einheitlicher Header für alle Seiten -->
+<div class="efficio-header">
+    <div class="efficio-header-top">
+        <h1>effic.io</h1>
+        <div class="header-links">
+            {% if current_user.is_authenticated %}
+                <span class="user-greeting">Hallo, {{ current_user.username }}</span>
+                <a href="{{ url_for('saved_calculations') }}" class="auth-button">Gespeicherte Berechnungen</a>
+                <a href="{{ url_for('logout') }}" class="auth-button">Abmelden</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="auth-button">Anmelden</a>
+                <a href="{{ url_for('register') }}" class="auth-button">Registrieren</a>
+            {% endif %}
+            <a href="{{ url_for('about') }}" class="about-link">Über effic.io</a>
+        </div>
+    </div>
+    
+    <div class="efficio-header-content">
+        <div class="efficio-header-text">
+            <p class="efficio-tagline">Innovationen vorantreiben. Wirkung messen.</p>
+            <h2 class="efficio-headline">KI ohne Hype, dafür mit Ergebnis</h2>
+            <p class="efficio-subline">Zu viele KI-Ideen, zu wenig Entscheidungssicherheit? Mit effic.io finden Sie in 3 Minuten heraus, welche Usecases echten Business-Wert bringen – und welche nicht.</p>
+            
+            <div class="efficio-usp-list">
+                <div class="efficio-usp-item">
+                    <span class="efficio-usp-icon">✅</span>
+                    <span class="efficio-usp-text">Messbar – Klarer Score basierend auf Business-Nutzen, technischer Machbarkeit und Nutzerakzeptanz.</span>
+                </div>
+                <div class="efficio-usp-item">
+                    <span class="efficio-usp-icon">⚡</span>
+                    <span class="efficio-usp-text">Schnell – Beantworten Sie wenige Fragen. In 3 Minuten liegt Ihr Wirkungsscore vor.</span>
+                </div>
+                <div class="efficio-usp-item">
+                    <span class="efficio-usp-icon">📊</span>
+                    <span class="efficio-usp-text">Vergleichbar – Bewerten und priorisieren Sie KI-Usecases faktenbasiert statt gefühlt.</span>
+                </div>
+            </div>
+        </div>
+        <div class="efficio-header-image">
+            <img src="{{ url_for('static', filename='Images/person_with_magnifier.png') }}" alt="KI-Priorisierung">
+        </div>
+    </div>
+</div>

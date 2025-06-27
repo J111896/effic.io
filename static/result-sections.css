@@ -1,0 +1,112 @@
+/* Styling für die neuen Sektionen auf der Ergebnisseite */
+
+.score-section {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.score-section h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+.metric-value-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.metric-value-container .metric-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.score-range-container {
+    background-color: #f0f8ff;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-left: 3px solid #4a90e2;
+}
+
+.score-range {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.confidence-indicator {
+    font-size: 0.8rem;
+    color: #777;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+/* Anpassungen für die Level-Badges */
+.level-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: white;
+}
+
+.level-1 {
+    background-color: #ff9800;
+}
+
+.level-2 {
+    background-color: #2196F3;
+}
+
+.level-3 {
+    background-color: #4CAF50;
+}
+
+/* Anpassungen für den Gesamtscore */
+.score-section .result-score-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Styling für Toggle-Buttons */
+.toggle-details {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.toggle-details:hover {
+    background-color: #e0e0e0;
+}
+
+.score-section .result-score {
+    font-size: 1.5rem;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    font-weight: bold;
+}

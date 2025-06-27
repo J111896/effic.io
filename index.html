@@ -1,0 +1,69 @@
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM vollständig geladen");
+    
+    // Branchenauswahl-Listener
+    const branchenSelect = document.getElementById('branche-select');
+    
+    if (branchenSelect) {
+        console.log("Branchenauswahl gefunden");
+        
+        // Alle verfügbaren Optionen anzeigen
+        const optionen = Array.from(branchenSelect.options).map(opt => opt.value).filter(val => val !== "");
+        console.log("Verfügbare Optionen:", optionen);
+        
+        branchenSelect.addEventListener('change', function() {
+            // Zeige die KPIs für die ausgewählte Branche an
+            const selectedBranche = this.value;
+            console.log("Branche ausgewählt:", selectedBranche);
+            showBrancheKPIs(selectedBranche);
+        });
+    } else {
+        console.error("Branchenauswahl nicht gefunden!");
+    }
+    
+    function showBrancheKPIs(branche) {
+        // Alle KPI-Elemente ausblenden
+        const kpiElements = document.querySelectorAll('.kpi-group');
+        console.log("Gefundene KPI-Gruppen:", kpiElements.length);
+        
+        kpiElements.forEach(el => {
+            console.log("KPI-Gruppe gefunden:", el.dataset.branche);
+            el.style.display = 'none';
+        });
+        
+        // Nur die KPIs der ausgewählten Branche anzeigen
+        const selectedKPIs = document.querySelector(`.kpi-group[data-branche="${branche}"]`);
+        if (selectedKPIs) {
+            console.log("KPI-Gruppe für Branche gefunden:", branche);
+            console.log("Anzahl KPIs in dieser Gruppe:", selectedKPIs.querySelectorAll('.kpi-input').length);
+            selectedKPIs.style.display = 'block';
+        } else {
+            console.error(`KPI-Gruppe für Branche "${branche}" nicht gefunden!`);
+        }
+    }
+});
+
+<!-- KPI Eingabefelder für jede Branche -->
+{% for branche_name, branche_kpis in kpis.items() %}
+<div class="kpi-group kpi-box" data-branche="{{ branche_name }}" style="display: none;">
+    <h3>KPI-Eingabe für {{ branche_name }}</h3>
+    {% for kpi in branche_kpis %}
+    <div class="kpi-input">
+        <div class="tooltip">
+            <div class="kpi-header">{{ kpi['KPI-Name'] }}{% if kpi.get('Mess-Einheit') %} ({{ kpi.get('Mess-Einheit') }}){% endif %}</div>
+            <span class="tooltiptext">
+                {% if kpi.get('Tooltip-Text') %}
+                    {{ kpi.get('Tooltip-Text') }}
+                {% else %}
+                    Benchmark-Werte: Keine Daten verfügbar
+                {% endif %}
+            </span>
+        </div>
+        <div class="kpi-description">{{ kpi['KPI-Erklärung'] }}</div>
+        <input type="number" name="kpi_{{ kpi['ID'] }}" min="0" 
+            {% if kpi.get('Mess-Einheit') == '%' %}max="100"{% endif %} 
+            value="0" required>
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}

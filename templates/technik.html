@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Technik-Bewertung - effic.io{% endblock %}
+
+{% block content %}
+            <div class="technik-header">
+                <div class="technik-header-content">
+                    <div class="technik-header-text">
+                        <h2>Technik-Bewertung</h2>
+                        <p class="technik-description">Bewerten Sie den technischen Reifegrad Ihres KI-Projekts anhand der folgenden Kriterien.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="technik-box">
+                
+                <form action="{{ url_for('process_technik') }}" method="POST" id="technikForm">
+                    <div class="question-container">
+                        <!-- Konzeptstatus -->
+                        <div class="question-item question-box">
+                            <div class="question-header">
+
+                                <h4>Konzeptstatus: Gibt es bereits ein technisches Konzept oder eine nachvollziehbare Idee für die Lösung?</h4>
+                            </div>
+                            <div class="radio-container">
+                                <label class="radio-label">
+                                    <input type="radio" name="concept_status" value="nein" onclick="checkForNextQuestion()">
+                                    <span>Nein</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="concept_status" value="skizzen" onclick="showNextQuestion()">
+                                    <span>Erste Skizzen / Usecase-Idee vorhanden</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="concept_status" value="konzept" onclick="showNextQuestion()">
+                                    <span>Ausgearbeitetes technisches Konzept vorhanden</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Validierung -->
+                        <div class="question-item question-box" id="validation" style="display: none;">
+                            <div class="question-header">
+
+                                <h4>Validierung: Wurde die technische Machbarkeit bereits in einem Proof of Concept (PoC) getestet?</h4>
+                            </div>
+                            <div class="radio-container">
+                                <label class="radio-label">
+                                    <input type="radio" name="validation" value="nein" onclick="checkForNextQuestion()">
+                                    <span>Noch nicht</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="validation" value="intern" onclick="showNextQuestion()">
+                                    <span>Intern getestet (Laborsettings / Simulation)</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="validation" value="extern" onclick="showNextQuestion()">
+                                    <span>Extern / realitätsnah validiert (Pilotumgebung)</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Prototypstatus -->
+                        <div class="question-item question-box" id="prototype" style="display: none;">
+                            <div class="question-header">
+
+                                <h4>Prototypstatus: Gibt es bereits einen funktionierenden Prototyp?</h4>
+                            </div>
+                            <div class="radio-container">
+                                <label class="radio-label">
+                                    <input type="radio" name="prototype" value="nein" onclick="checkForNextQuestion()">
+                                    <span>Nein</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="prototype" value="entwicklung" onclick="showNextQuestion()">
+                                    <span>Prototyp in Entwicklung</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="prototype" value="test" onclick="showNextQuestion()">
+                                    <span>Prototyp im Testeinsatz</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Integration -->
+                        <div class="question-item question-box" id="integration" style="display: none;">
+                            <div class="question-header">
+
+                                <h4>Integration: Ist die Lösung bereits in bestehende Systeme oder Prozesse integriert?</h4>
+                            </div>
+                            <div class="radio-container">
+                                <label class="radio-label">
+                                    <input type="radio" name="integration" value="nein" onclick="checkForNextQuestion()">
+                                    <span>Noch nicht</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="integration" value="schnittstellen" onclick="showNextQuestion()">
+                                    <span>Schnittstellen definiert</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="integration" value="teilweise" onclick="showNextQuestion()">
+                                    <span>Teilweise integriert</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="integration" value="vollständig" onclick="showNextQuestion()">
+                                    <span>Vollständig integriert</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Betriebsreife -->
+                        <div class="question-item question-box" id="maturity" style="display: none;">
+                            <div class="question-header">
+
+                                <h4>Betriebsreife: Ist die Technologie marktreif oder in produktivem Einsatz?</h4>
+                            </div>
+                            <div class="radio-container">
+                                <label class="radio-label">
+                                    <input type="radio" name="maturity" value="nein" onclick="document.getElementById('nextButton').style.display = 'block'">
+                                    <span>Nein</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="maturity" value="erste" onclick="document.getElementById('nextButton').style.display = 'block'">
+                                    <span>Erste Anwender:innen nutzen sie</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="maturity" value="produktiv" onclick="document.getElementById('nextButton').style.display = 'block'">
+                                    <span>Produktiv in mehreren Umgebungen</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="navigation-buttons">
+                        <a href="/" class="back-button">Zurück</a>
+                        <button type="submit" class="next-button" id="nextButton" style="display: none;">Weiter zur KPI-Bewertung</button>
+                    </div>
+                </form>
+            </div>
+
+    <script>
+        // Beim Laden der Seite ausführen
+        window.onload = function() {
+            // Stelle sicher, dass der Button initial ausgeblendet ist
+            document.getElementById('nextButton').style.display = 'none';
+        };
+        
+        function showNextQuestion() {
+            // Bestimme die nächste Frage basierend auf der aktuellen Frage
+            const currentQuestion = event.target.name;
+            let nextQuestionId = '';
+            
+            if (currentQuestion === 'concept_status') {
+                nextQuestionId = 'validation';
+            } else if (currentQuestion === 'validation') {
+                nextQuestionId = 'prototype';
+            } else if (currentQuestion === 'prototype') {
+                nextQuestionId = 'integration';
+            } else if (currentQuestion === 'integration') {
+                nextQuestionId = 'maturity';
+                // Zeige den Button an, wenn die letzte Frage (Betriebsreife) erreicht wird
+                document.getElementById('nextButton').style.display = 'block';
+            }
+            
+            // Zeige die nächste Frage an, wenn vorhanden
+            if (nextQuestionId) {
+                document.getElementById(nextQuestionId).style.display = 'block';
+            }
+        }
+        
+        function checkForNextQuestion() {
+            // Wenn "Nein" ausgewählt wurde, zeige den Button an und sende das Formular nicht automatisch ab
+            const currentQuestion = event.target.name;
+            if (event.target.value === 'nein') {
+                document.getElementById('nextButton').style.display = 'block';
+            }
+        }
+    </script>
+{% endblock %}

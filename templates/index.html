@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>effic.io - Effizienzanalyse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles-new.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='kpi-styles.css') }}">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='kpi-script.js') }}" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header-row">
+                <h1>effic.io</h1>
+                <div class="header-links">
+                    {% if current_user.is_authenticated %}
+                        <span class="user-greeting">Hallo, {{ current_user.username }}</span>
+                        <a href="{{ url_for('saved_calculations') }}" class="auth-button">Gespeicherte Berechnungen</a>
+                        <a href="{{ url_for('logout') }}" class="auth-button">Abmelden</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="auth-button">Anmelden</a>
+                        <a href="{{ url_for('register') }}" class="auth-button">Registrieren</a>
+                    {% endif %}
+                    <a href="{{ url_for('about') }}" class="about-link">Über effic.io</a>
+                </div>
+            </div>
+            
+            <div class="hero-section">
+                <div class="hero-content">
+                    <div>KI priorisieren, die wirkt – statt KI, die glänzt.</div>
+                    <h2 class="hero-title">Zu viele KI-Ideen, zu wenig Entscheidungssicherheit?</h2>
+                    <div class="hero-subtitle">Mit effic.io finden Sie in 3 Minuten heraus, welche Usecases echte Wirksamkeit zeigen – und welche nicht.</div>
+                    
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <span class="feature-icon">✅</span>
+                            Messbar – Klarer Score basierend auf Business-Nutzen, technischer Machbarkeit und Nutzerakzeptanz.
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-icon">⚡</span>
+                            Schnell – Beantworten Sie wenige Fragen. In 3 Minuten liegt Ihr Wirkungsscore vor.
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-icon">📊</span>
+                            Vergleichbar – Bewerten und priorisieren Sie KI-Usecases faktenbasiert statt gefühlt.
+                        </li>
+                    </ul>
+                </div>
+                <div class="hero-image">
+                    <img src="{{ url_for('static', filename='Images/person_with_magnifier.png') }}" alt="Person mit Lupe">
+                </div>
+            </div>
+            
+            <div class="kpi-box">
+                <h3>Effizienzanalyse starten</h3>
+                <form action="{{ url_for('process_kpi') }}" method="POST">
+                    <!-- Neue Fragen mit Slidern -->
+                    <div class="question-container">
+                        <div class="question-item question-box">
+                            <div class="question-header">
+                                <h4>🥇 Frage 1: Welche strategische Relevanz hat das Projekt?</h4>
+                            </div>
+                            <div class="strategic-buttons">
+                                <label class="strategic-button">
+                                    <input type="radio" name="strategic_relevance" value="operativ" checked>
+                                    <span class="button-content">
+                                        <span class="button-icon">🔘</span>
+                                        <span class="button-text">Operativ (taktisch, kurzfristig)</span>
+                                    </span>
+                                </label>
+                                <label class="strategic-button">
+                                    <input type="radio" name="strategic_relevance" value="wachstum">
+                                    <span class="button-content">
+                                        <span class="button-icon">🚀</span>
+                                        <span class="button-text">Wachstumstreiber (strategisch)</span>
+                                    </span>
+                                </label>
+                                <label class="strategic-button">
+                                    <input type="radio" name="strategic_relevance" value="zukunft">
+                                    <span class="button-content">
+                                        <span class="button-icon">🧭</span>
+                                        <span class="button-text">Zukunftsrelevant / Transformativ (Gamechanger)</span>
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="info-bubble">
+                                Projekte mit hoher strategischer Relevanz rechtfertigen meist auch höhere Investitionen.
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="question-item question-box">
+                            <div class="question-header">
+                                <h4>🥈 Frage 2: Wie stark verbessert die Idee die Ziel-KPIs?</h4>
+                            </div>
+                            <div class="kpi-selection">
+                                <p>Wählen Sie bis zu 3 relevante KPIs, die durch das Projekt beeinflusst werden:</p>
+                                <div class="kpi-checkboxes">
+                                    <label class="kpi-checkbox">
+                                        <input type="checkbox" name="selected_kpis" value="umsatz" class="kpi-select-box">
+                                        <span>Umsatz</span>
+                                    </label>
+                                    <label class="kpi-checkbox">
+                                        <input type="checkbox" name="selected_kpis" value="kosten" class="kpi-select-box">
+                                        <span>Kosten</span>
+                                    </label>
+                                    <label class="kpi-checkbox">
+                                        <input type="checkbox" name="selected_kpis" value="durchlaufzeit" class="kpi-select-box">
+                                        <span>Durchlaufzeit</span>
+                                    </label>
+                                    <label class="kpi-checkbox">
+                                        <input type="checkbox" name="selected_kpis" value="co2" class="kpi-select-box">
+                                        <span>CO₂</span>
+                                    </label>
+                                    <label class="kpi-checkbox">
+                                        <input type="checkbox" name="selected_kpis" value="kundenbindung" class="kpi-select-box">
+                                        <span>Kundenbindung</span>
+                                    </label>
+                                    <label class="kpi-checkbox">
+                                        <input type="checkbox" name="selected_kpis" value="fehlerrate" class="kpi-select-box">
+                                        <span>Fehlerrate</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div id="kpi-sliders-container">
+                                <!-- Dynamische Slider werden hier per JavaScript eingefügt -->
+                                <div class="no-kpi-selected">Bitte wählen Sie mindestens einen KPI aus.</div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="question-item question-box">
+                            <div class="question-header">
+                                <h4>🥉 Frage 3: Wie viel Potenzial zur ROI-Steigerung sehen Sie?</h4>
+                            </div>
+                            <div class="slider-container">
+                                <input type="range" id="roi-potential" name="roi_potential" min="0" max="100" value="50" class="slider">
+                                <div class="slider-labels">
+                                    <span>0%</span>
+                                    <span>25%</span>
+                                    <span>50%</span>
+                                    <span>75%</span>
+                                    <span>100%</span>
+                                </div>
+                                <div class="slider-descriptions">
+                                    <span>Kein ROI</span>
+                                    <span>Gering</span>
+                                    <span>Solide</span>
+                                    <span>Hoch</span>
+                                    <span>Gamechanger</span>
+                                </div>
+                            </div>
+                            <div class="info-bubble">
+                                Schätzen Sie den finanziellen Nutzen dieses Projekts in Relation zum Aufwand.
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="button cta">Score berechnen und besser entscheiden</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

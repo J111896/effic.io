@@ -1,0 +1,41 @@
+/* Styles für den Result-Header */
+.result-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 20px;
+}
+
+.back-link {
+    background-color: #4361ee;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 15px;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.back-link:after {
+    content: '←';
+    margin-right: 8px;
+    transition: transform 0.3s ease;
+}
+
+.back-link:hover {
+    background-color: #3a56d4;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(67, 97, 238, 0.4);
+    text-decoration: none;
+}
+
+.back-link:hover:after {
+    transform: translateX(-3px);
+}

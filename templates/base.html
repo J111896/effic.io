@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}effic.io{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles-new.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='header-styles.css') }}">
+    {% block additional_styles %}{% endblock %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    {% block additional_head %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            {% include 'header.html' %}
+            
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>

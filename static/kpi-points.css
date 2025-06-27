@@ -1,0 +1,126 @@
+/* KPI Punkteskala Styles */
+
+/* Container für die Punkteskala */
+.points-scale-container {
+    margin-top: 15px;
+    padding: 10px 0;
+    width: 100%;
+    position: relative;
+}
+
+/* Die Punkteskala selbst */
+.points-scale {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    margin-bottom: 5px;
+}
+
+/* Die horizontale Linie unter den Punkten */
+.scale-line {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    right: 10px;
+    height: 3px;
+    background-color: #e2e8f0;
+    z-index: 1;
+    margin-top: 15px;
+}
+
+/* Einzelner Punkt-Container */
+.point-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: all 0.2s ease;
+}
+
+/* Der eigentliche Punkt */
+.point {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    transition: all 0.2s ease;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Beschriftung unter dem Punkt */
+.point-label {
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Aktiver Punkt */
+.point-item.active .point {
+    background-color: #1a365d;
+    border-color: #1a365d;
+    transform: scale(1.3);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.point-item.active .point-label {
+    font-weight: bold;
+    color: #1a365d;
+}
+
+/* Hover-Effekt für Punkte */
+.point-item:hover .point {
+    background-color: #e6f0fa;
+    transform: scale(1.1);
+}
+
+/* Beschreibungen unter der Skala */
+.scale-descriptions {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 25px;
+    font-size: 14px;
+    color: #666;
+    padding: 0 5px;
+}
+
+.scale-description-start {
+    text-align: left;
+    font-weight: normal;
+}
+
+.scale-description-end {
+    text-align: right;
+    font-weight: normal;
+}
+
+/* KPI-Wert Anzeige */
+.kpi-value-display {
+    font-weight: bold;
+    color: #3498db;
+    font-size: 18px;
+    margin-left: 10px;
+}
+
+/* KPI-Slider Header */
+.kpi-slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* KPI-Slider Item */
+.kpi-slider-item {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}

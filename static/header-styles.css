@@ -1,0 +1,108 @@
+/* Styles für den einheitlichen effic.io Header */
+.efficio-header {
+    background-color: #e6f0ff;
+    padding: 0;
+    margin-bottom: 30px;
+}
+
+.efficio-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    border-bottom: 1px solid #eaeaea;
+    background-color: white;
+}
+
+.efficio-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 30px;
+    gap: 30px;
+}
+
+.efficio-header-text {
+    flex: 1;
+}
+
+.efficio-header-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.efficio-header-image img {
+    max-width: 100%;
+    height: auto;
+    max-height: 300px;
+}
+
+.efficio-tagline {
+    color: #3498db;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+.efficio-headline {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 15px;
+    line-height: 1.2;
+}
+
+.efficio-subline {
+    font-size: 16px;
+    color: #34495e;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+.efficio-usp-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.efficio-usp-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.efficio-usp-icon {
+    font-size: 20px;
+    line-height: 1.2;
+}
+
+.efficio-usp-text {
+    font-size: 15px;
+    color: #34495e;
+    line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .efficio-header-content {
+        flex-direction: column;
+        padding: 30px 20px;
+    }
+    
+    .efficio-header-image {
+        order: -1;
+        margin-bottom: 20px;
+    }
+    
+    .efficio-headline {
+        font-size: 26px;
+    }
+    
+    .efficio-subline {
+        font-size: 15px;
+    }
+}
