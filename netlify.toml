@@ -1,6 +1,6 @@
 [build]
   publish = "."
-  command = "pip install -r requirements.txt"
+  command = "npm install && pip install -r requirements.txt && npm run build"
 
 [build.environment]
   PYTHON_VERSION = "3.9"
