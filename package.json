@@ -1,0 +1,20 @@
+{
+  "name": "efficio-app",
+  "version": "1.0.0",
+  "description": "KI-Projekt Bewertungstool",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'Build completed'",
+    "start": "python app.py"
+  },
+  "dependencies": {
+    "netlify-lambda": "^2.0.15"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/J111896/effic.io"
+  },
+  "author": "effic.io",
+  "license": "MIT"
+}
