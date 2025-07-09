@@ -26,7 +26,7 @@
                 <!-- Project Status Header -->
                 <div class="project-status-header">
                     <h3>Projekt Status: 
-                        <span style="color: {% if total_score >= 0.7 %}#4CAF50{% elif total_score >= 0.4 %}#FFC107{% else %}#F44336{% endif %}">
+                        <span class="status-color" style="color: {{ '#4CAF50' if total_score >= 0.7 else '#FFC107' if total_score >= 0.4 else '#F44336' }}">
                             {% if total_score >= 0.7 %}Gut{% elif total_score >= 0.4 %}Mittel{% else %}Schlecht{% endif %}
                         </span>
                     </h3>
