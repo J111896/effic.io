@@ -1,0 +1,15 @@
+# PythonAnywhere configuration
+
+# Python version
+python_version = 3.9
+
+# WSGI configuration
+wsgi_file = wsgi.py
+application_variable = application
+
+# Static files
+static_path = /static/
+static_dir = static/
+
+# Database
+database_path = efficio.db

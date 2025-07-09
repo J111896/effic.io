@@ -5,9 +5,13 @@ import sqlite3
 import os
 import json
 from datetime import datetime
+from dotenv import load_dotenv
+
+# Load environment variables from .env file if it exists
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'efficio_secret_key'
+app.secret_key = os.environ.get('SECRET_KEY', 'efficio_secret_key')
 
 # Konfiguration für Login-Manager
 login_manager = LoginManager()
@@ -15,7 +19,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 # Datenbankpfad
-DB_PATH = 'efficio.db'
+DB_PATH = os.environ.get('DATABASE_PATH', 'efficio.db')
 
 # Benutzerklasse für Flask-Login
 class User(UserMixin):

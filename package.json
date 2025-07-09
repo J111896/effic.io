@@ -4,15 +4,10 @@
   "description": "KI-Projekt Bewertungstool",
   "main": "index.js",
   "scripts": {
-    "build": "netlify-lambda build netlify/functions",
-    "start": "python app.py"
+    "start": "python app.py",
+    "init-db": "python init_db.py"
   },
-  "dependencies": {
-    "netlify-lambda": "^2.0.15",
-    "serverless-http": "^3.2.0",
-    "child_process": "^1.0.2",
-    "path": "^0.12.7"
-  },
+  "dependencies": {},
   "devDependencies": {},
   "repository": {
     "type": "git",

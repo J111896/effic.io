@@ -48,6 +48,13 @@ venv.bak/
 
 # OS
 .DS_Store
+Thumbs.db
+
+# Node.js (no longer needed for Netlify)
+node_modules/
+
+# PythonAnywhere
+.pythonanywhere.com/
 .DS_Store?
 ._*
 .Spotlight-V100
@@ -66,8 +73,8 @@ Thumbs.db
 *.tmp
 *.temp
 
-# Netlify
-.netlify/
+# Environment variables
+.env
 
 # Node.js
 node_modules/
