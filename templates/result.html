@@ -59,11 +59,11 @@
                 <div class="dynamic-weights">
                     <h4>Angewandte Gewichtung:</h4>
                     <ul>
-                        <li>KPI-Score: <strong>{{ calculation.weights.kpi_weight * 100 }}%</strong></li>
-                        <li>Technik-Score: <strong>{{ calculation.weights.technik_weight * 100 }}%</strong></li>
-                        <li>Nutzerbereitschafts-Score: <strong>{{ calculation.weights.user_weight * 100 }}%</strong></li>
+                        <li>KPI-Score: <strong>{{ calculation['weights']['kpi_weight'] * 100 }}%</strong></li>
+                        <li>Technik-Score: <strong>{{ calculation['weights']['technik_weight'] * 100 }}%</strong></li>
+                        <li>Nutzerbereitschafts-Score: <strong>{{ calculation['weights']['user_weight'] * 100 }}%</strong></li>
                     </ul>
-                    <p><em>{{ calculation.weights.weight_explanation }}</em></p>
+                    <p><em>{{ calculation['weights']['weight_explanation'] }}</em></p>
                 </div>
                 
                 <!-- Action Recommendations -->
