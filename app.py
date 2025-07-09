@@ -359,7 +359,7 @@ def process_user_readiness():
         trust_score = 0.0
     user_score += trust_score
     
-    # Perceived Threat (inverted: No = 1.0, Partially = 0.5, Yes = 0.0)
+    # Perceived Threat
     if perceived_threat == 'no':
         threat_score = 1.0
     elif perceived_threat == 'partially':
