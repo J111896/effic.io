@@ -2,6 +2,11 @@
 
 {% block title %}Technik-Bewertung - effic.io{% endblock %}
 
+{% block additional_head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='step-navigation.css') }}">
+    <script src="{{ url_for('static', filename='step-navigation.js') }}" defer></script>
+{% endblock %}
+
 {% block content %}
             <div class="technik-header">
                 <div class="technik-header-content">
@@ -132,8 +137,8 @@
                     </div>
                     
                     <div class="navigation-buttons">
-                        <a href="/" class="back-button">Zurück</a>
-                        <button type="submit" class="next-button" id="nextButton" style="display: none;">Weiter zur KPI-Bewertung</button>
+                        <a href="/" class="back-button">← Zurück zum Start</a>
+                        <button type="submit" class="forward-button" id="nextButton" style="display: none;" onclick="if(window.stepNavigationManager) window.stepNavigationManager.navigateForward('/kpi_bewertung')">Weiter zur KPI-Bewertung →</button>
                     </div>
                 </form>
             </div>

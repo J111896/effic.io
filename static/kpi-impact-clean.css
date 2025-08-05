@@ -1,0 +1,212 @@
+/* Saubere KPI-Impact-Skala - Tailwind CSS Ergänzungen */
+
+/* Basis-Animationen für Impact-Auswahl */
+@keyframes impact-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes impact-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.1); }
+}
+
+/* Impact-Level spezifische Farben */
+.impact-minimal {
+  --impact-color: #ef4444;
+  --impact-bg: #fef2f2;
+  --impact-border: #fca5a5;
+}
+
+.impact-gering {
+  --impact-color: #f97316;
+  --impact-bg: #fff7ed;
+  --impact-border: #fdba74;
+}
+
+.impact-mittel {
+  --impact-color: #eab308;
+  --impact-bg: #fefce8;
+  --impact-border: #fde047;
+}
+
+.impact-hoch {
+  --impact-color: #22c55e;
+  --impact-bg: #f0fdf4;
+  --impact-border: #86efac;
+}
+
+.impact-extrem {
+  --impact-color: #059669;
+  --impact-bg: #ecfdf5;
+  --impact-border: #6ee7b7;
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 640px) {
+  .kpi-impact-scale {
+    padding: 1rem;
+  }
+  
+  .impact-level-button {
+    padding: 0.5rem;
+  }
+  
+  .impact-point {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.75rem;
+  }
+  
+  .impact-label {
+    font-size: 0.625rem;
+    margin-top: 0.25rem;
+  }
+}
+
+/* Hover-Effekte für bessere Interaktion */
+.impact-level-button:hover .impact-point {
+  transform: scale(1.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.impact-level-button:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Aktive Auswahl Hervorhebung */
+.impact-level-active {
+  transform: scale(1.1);
+}
+
+.impact-level-active .impact-point {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Verbindungslinie Gradient */
+.impact-connection-line {
+  background: linear-gradient(
+    to right,
+    #ef4444 0%,
+    #f97316 25%,
+    #eab308 50%,
+    #22c55e 75%,
+    #059669 100%
+  );
+}
+
+/* KPI-Auswahl Checkboxen */
+.kpi-checkbox:checked {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.kpi-checkbox:checked:hover {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+/* Übergangseffekte */
+.kpi-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kpi-transition-fast {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Benchmark-Orientierungshilfen */
+.benchmark-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .benchmark-grid {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}
+
+/* Accessibility Verbesserungen */
+@media (prefers-reduced-motion: reduce) {
+  .kpi-transition,
+  .kpi-transition-fast,
+  .impact-level-button {
+    transition: none;
+  }
+  
+  .impact-pulse {
+    animation: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .impact-point {
+    border-width: 3px;
+  }
+  
+  .kpi-impact-scale {
+    border-width: 3px;
+  }
+}
+
+/* Dark Mode Support (falls benötigt) */
+@media (prefers-color-scheme: dark) {
+  .kpi-impact-scale {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+  
+  .impact-connection-line {
+    opacity: 0.8;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .kpi-impact-scale {
+    break-inside: avoid;
+    border: 2px solid #000;
+  }
+  
+  .impact-level-button {
+    border: 1px solid #000;
+  }
+}
+
+/* Utility Classes für spezielle Anwendungsfälle */
+.kpi-shadow-soft {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.kpi-shadow-medium {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.kpi-shadow-strong {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Spezielle Farb-Utilities für Impact-Level */
+.text-impact-minimal { color: #dc2626; }
+.text-impact-gering { color: #ea580c; }
+.text-impact-mittel { color: #ca8a04; }
+.text-impact-hoch { color: #16a34a; }
+.text-impact-extrem { color: #047857; }
+
+.bg-impact-minimal { background-color: #fef2f2; }
+.bg-impact-gering { background-color: #fff7ed; }
+.bg-impact-mittel { background-color: #fefce8; }
+.bg-impact-hoch { background-color: #f0fdf4; }
+.bg-impact-extrem { background-color: #ecfdf5; }
+
+.border-impact-minimal { border-color: #fca5a5; }
+.border-impact-gering { border-color: #fdba74; }
+.border-impact-mittel { border-color: #fde047; }
+.border-impact-hoch { border-color: #86efac; }
+.border-impact-extrem { border-color: #6ee7b7; }

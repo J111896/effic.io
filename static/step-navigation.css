@@ -1,0 +1,270 @@
+/* Step Navigation Styles */
+
+.progress-indicator {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #007bff, #0056b3);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+    position: relative;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.progress-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+    text-align: center;
+}
+
+/* Enhanced Back Button Styles */
+.enhanced-back-button,
+.step-back-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #6c757d, #5a6268);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.enhanced-back-button:hover,
+.step-back-button:hover {
+    background: linear-gradient(135deg, #5a6268, #495057);
+    transform: translateX(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    color: white;
+    text-decoration: none;
+}
+
+.enhanced-back-button:active,
+.step-back-button:active {
+    transform: translateX(-3px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Navigation Button Container */
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 30px 0;
+    gap: 15px;
+}
+
+.navigation-buttons .back-button {
+    margin-right: auto;
+}
+
+.navigation-buttons .forward-button {
+    margin-left: auto;
+}
+
+/* Forward Button Enhancement */
+.forward-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.forward-button:hover {
+    background: linear-gradient(135deg, #20c997, #17a2b8);
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    color: white;
+    text-decoration: none;
+}
+
+.forward-button:active {
+    transform: translateX(3px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Step Indicator Dots */
+.step-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.step-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #dee2e6;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.step-dot.active {
+    background-color: #007bff;
+    transform: scale(1.2);
+}
+
+.step-dot.completed {
+    background-color: #28a745;
+}
+
+.step-dot.completed::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 8px;
+    font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .progress-indicator {
+        padding: 15px;
+        margin: 15px 0;
+    }
+    
+    .progress-text {
+        font-size: 12px;
+    }
+    
+    .navigation-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .enhanced-back-button,
+    .step-back-button,
+    .forward-button {
+        width: 100%;
+        justify-content: center;
+        padding: 15px;
+    }
+    
+    .enhanced-back-button:hover,
+    .step-back-button:hover {
+        transform: translateY(-2px);
+    }
+    
+    .forward-button:hover {
+        transform: translateY(-2px);
+    }
+}
+
+/* Animation for step transitions */
+.step-transition {
+    opacity: 0;
+    transform: translateX(20px);
+    animation: slideIn 0.5s ease forwards;
+}
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Loading state for navigation */
+.navigation-loading {
+    pointer-events: none;
+    opacity: 0.6;
+    position: relative;
+}
+
+.navigation-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #ffffff;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Auto-save indicator */
+.auto-save-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #28a745;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+.auto-save-indicator.show {
+    opacity: 1;
+}
+
+.auto-save-indicator.saving {
+    background: #ffc107;
+    color: #212529;
+}
+
+.auto-save-indicator.error {
+    background: #dc3545;
+}

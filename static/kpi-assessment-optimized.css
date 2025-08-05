@@ -1,0 +1,387 @@
+/* Optimierte KPI-Bewertung Styles */
+
+/* Container für die optimierte KPI-Bewertung */
+.kpi-assessment-container {
+    margin-top: 20px;
+    padding: 0;
+    width: 100%;
+}
+
+/* KPI-Slider Item mit verbessertem Design */
+.kpi-assessment-item {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.kpi-assessment-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+/* KPI Header mit Tooltip */
+.kpi-assessment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.kpi-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.kpi-icon {
+    font-size: 20px;
+}
+
+.kpi-value-badge {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    min-width: 80px;
+    text-align: center;
+}
+
+/* Tooltip für kontextuelle Hinweise */
+.kpi-tooltip {
+    position: absolute;
+    top: -8px;
+    right: 0;
+    cursor: help;
+}
+
+.tooltip-trigger {
+    width: 20px;
+    height: 20px;
+    background: #64748b;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.tooltip-content {
+    position: absolute;
+    top: 25px;
+    right: 0;
+    background: #1e293b;
+    color: white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.4;
+    width: 280px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.tooltip-content::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    right: 12px;
+    width: 12px;
+    height: 12px;
+    background: #1e293b;
+    transform: rotate(45deg);
+}
+
+.kpi-tooltip:hover .tooltip-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Optimierte Impact-Skala */
+.impact-scale-container {
+    margin-top: 16px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    border: 2px solid #e2e8f0;
+}
+
+.impact-scale-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 16px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.impact-scale {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    margin-bottom: 16px;
+    padding: 0 10px;
+}
+
+/* Verbindungslinie zwischen den Stufen */
+.impact-line {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    right: 20px;
+    height: 4px;
+    background: linear-gradient(90deg, #ef4444 0%, #f59e0b 25%, #eab308 50%, #22c55e 75%, #16a34a 100%);
+    border-radius: 2px;
+    z-index: 1;
+    transform: translateY(-50%);
+}
+
+/* Impact-Stufen */
+.impact-level {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.impact-level:hover {
+    background: rgba(59, 130, 246, 0.1);
+    transform: scale(1.05);
+}
+
+/* Impact-Punkt */
+.impact-point {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid #cbd5e1;
+    transition: all 0.3s ease;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #64748b;
+}
+
+/* Impact-Label */
+.impact-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    text-align: center;
+    line-height: 1.2;
+    max-width: 80px;
+    transition: all 0.3s ease;
+}
+
+/* Aktive Impact-Stufe */
+.impact-level.active .impact-point {
+    transform: scale(1.2);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+.impact-level.active .impact-label {
+    font-weight: 700;
+    color: #1e293b;
+}
+
+/* Spezifische Farben für jede Stufe */
+.impact-level[data-level="1"] .impact-point {
+    border-color: #ef4444;
+    background: #fef2f2;
+}
+
+.impact-level[data-level="1"].active .impact-point {
+    background: #ef4444;
+    color: white;
+}
+
+.impact-level[data-level="2"] .impact-point {
+    border-color: #f59e0b;
+    background: #fffbeb;
+}
+
+.impact-level[data-level="2"].active .impact-point {
+    background: #f59e0b;
+    color: white;
+}
+
+.impact-level[data-level="3"] .impact-point {
+    border-color: #eab308;
+    background: #fefce8;
+}
+
+.impact-level[data-level="3"].active .impact-point {
+    background: #eab308;
+    color: white;
+}
+
+.impact-level[data-level="4"] .impact-point {
+    border-color: #22c55e;
+    background: #f0fdf4;
+}
+
+.impact-level[data-level="4"].active .impact-point {
+    background: #22c55e;
+    color: white;
+}
+
+.impact-level[data-level="5"] .impact-point {
+    border-color: #16a34a;
+    background: #f0fdf4;
+}
+
+.impact-level[data-level="5"].active .impact-point {
+    background: #16a34a;
+    color: white;
+}
+
+/* Benchmark-Anker */
+.benchmark-indicators {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    padding: 0 10px;
+    font-size: 11px;
+    color: #6b7280;
+}
+
+.benchmark-indicator {
+    text-align: center;
+    max-width: 80px;
+    line-height: 1.2;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .kpi-assessment-item {
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+    
+    .kpi-assessment-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .kpi-tooltip {
+        position: static;
+        margin-top: 8px;
+    }
+    
+    .tooltip-content {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        width: 100%;
+        margin-top: 8px;
+    }
+    
+    .tooltip-content::before {
+        display: none;
+    }
+    
+    .impact-scale {
+        padding: 0 5px;
+    }
+    
+    .impact-point {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    
+    .impact-label {
+        font-size: 10px;
+        max-width: 60px;
+    }
+    
+    .benchmark-indicators {
+        font-size: 10px;
+        padding: 0 5px;
+    }
+    
+    .benchmark-indicator {
+        max-width: 60px;
+    }
+}
+
+/* Animation für Übergänge */
+@keyframes impactSelect {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1.2);
+    }
+}
+
+.impact-level.active .impact-point {
+    animation: impactSelect 0.3s ease;
+}
+
+/* Accessibility */
+.impact-level:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.impact-level[aria-pressed="true"] .impact-point {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* Keine KPI ausgewählt Nachricht */
+.no-kpi-selected {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6b7280;
+    font-style: italic;
+    background: #f9fafb;
+    border-radius: 8px;
+    border: 2px dashed #d1d5db;
+}
+
+.no-kpi-selected::before {
+    content: "📊";
+    display: block;
+    font-size: 32px;
+    margin-bottom: 12px;
+}

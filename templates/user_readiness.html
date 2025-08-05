@@ -2,6 +2,11 @@
 
 {% block title %}Nutzerbereitschaft - effic.io{% endblock %}
 
+{% block additional_head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='step-navigation.css') }}">
+    <script src="{{ url_for('static', filename='step-navigation.js') }}" defer></script>
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <div class="technik-header">
@@ -149,8 +154,8 @@
                 </div>
                 
                 <div class="navigation-buttons">
-                    <a href="/" class="back-button">Zurück</a>
-                    <button type="submit" class="next-button">Zum effic.io Score</button>
+                    <a href="{{ url_for('kpi_bewertung') }}" class="back-button">← Zurück zu KPI-Bewertung</a>
+                    <button type="submit" class="forward-button" onclick="if(window.stepNavigationManager) window.stepNavigationManager.navigateForward('/result')">Zum effic.io Score →</button>
                 </div>
             </div>
         </form>

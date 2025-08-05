@@ -3,8 +3,10 @@
 {% block title %}KPI-Bewertung - effic.io{% endblock %}
 
 {% block additional_styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='kpi-points.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='slider-answers.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='kpi-impact-clean.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='step-navigation.css') }}">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="{{ url_for('static', filename='step-navigation.js') }}" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -45,43 +47,63 @@
                         </div>
                         
                         
-                        <!-- KPI-Verbesserung -->
+                        <!-- KPI-Impact-Bewertung - Neue saubere Version -->
                         <div class="question-item question-box">
                             <div class="question-header">
                                 <h4>🥈 Frage 2: Wie stark verbessert die Idee die Ziel-KPIs?</h4>
                             </div>
-                            <div class="kpi-selection">
-                                <p>➕ Wählen Sie bis zu 3 relevante KPIs, die durch das Projekt beeinflusst werden.</p>
-                                <div class="kpi-checkboxes">
-                                    <label class="kpi-checkbox">
-                                        <input type="checkbox" name="kpi_checkbox" value="umsatz" class="kpi-select-box">
-                                        <span>Umsatz</span>
-                                    </label>
-                                    <label class="kpi-checkbox">
-                                        <input type="checkbox" name="kpi_checkbox" value="kosten" class="kpi-select-box">
-                                        <span>Kosten</span>
-                                    </label>
-                                    <label class="kpi-checkbox">
-                                        <input type="checkbox" name="kpi_checkbox" value="durchlaufzeit" class="kpi-select-box">
-                                        <span>Durchlaufzeit</span>
-                                    </label>
-                                    <label class="kpi-checkbox">
-                                        <input type="checkbox" name="kpi_checkbox" value="co2" class="kpi-select-box">
-                                        <span>CO₂</span>
-                                    </label>
-                                    <label class="kpi-checkbox">
-                                        <input type="checkbox" name="kpi_checkbox" value="kundenbindung" class="kpi-select-box">
-                                        <span>Kundenbindung</span>
-                                    </label>
-                                    <label class="kpi-checkbox">
-                                        <input type="checkbox" name="kpi_checkbox" value="fehlerrate" class="kpi-select-box">
-                                        <span>Fehlerrate</span>
-                                    </label>
+                            <div id="kpi-impact-assessment" class="space-y-6">
+                                <!-- KPI-Auswahl -->
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <p class="text-sm text-gray-700 mb-4 flex items-center gap-2">
+                                        <span>➕</span>
+                                        Wählen Sie bis zu 3 relevante KPIs, die durch das Projekt beeinflusst werden.
+                                    </p>
+                                    
+                                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="kpi-selection-grid">
+                                        <label class="kpi-selection-item" data-kpi="umsatz">
+                                            <input type="checkbox" class="kpi-checkbox w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
+                                            <span class="text-lg">💰</span>
+                                            <span class="font-medium text-sm">Umsatz</span>
+                                        </label>
+                                        <label class="kpi-selection-item" data-kpi="kosten">
+                                            <input type="checkbox" class="kpi-checkbox w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
+                                            <span class="text-lg">📉</span>
+                                            <span class="font-medium text-sm">Kosten</span>
+                                        </label>
+                                        <label class="kpi-selection-item" data-kpi="durchlaufzeit">
+                                            <input type="checkbox" class="kpi-checkbox w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
+                                            <span class="text-lg">⚡</span>
+                                            <span class="font-medium text-sm">Durchlaufzeit</span>
+                                        </label>
+                                        <label class="kpi-selection-item" data-kpi="co2">
+                                            <input type="checkbox" class="kpi-checkbox w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
+                                            <span class="text-lg">🌱</span>
+                                            <span class="font-medium text-sm">CO₂-Reduktion</span>
+                                        </label>
+                                        <label class="kpi-selection-item" data-kpi="kundenbindung">
+                                            <input type="checkbox" class="kpi-checkbox w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
+                                            <span class="text-lg">🤝</span>
+                                            <span class="font-medium text-sm">Kundenbindung</span>
+                                        </label>
+                                        <label class="kpi-selection-item" data-kpi="fehlerrate">
+                                            <input type="checkbox" class="kpi-checkbox w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
+                                            <span class="text-lg">🎯</span>
+                                            <span class="font-medium text-sm">Fehlerrate</span>
+                                        </label>
+                                    </div>
                                 </div>
-                                <div id="kpi-sliders-container">
-                                    <!-- Dynamische Slider werden hier per JavaScript eingefügt -->
-                                    <div class="no-kpi-selected">Bitte wählen Sie mindestens einen KPI aus.</div>
+
+                                <!-- KPI-Impact-Bewertungen -->
+                                <div id="kpi-assessments-container" class="space-y-4">
+                                    <div id="no-kpi-message" class="text-center py-12 text-gray-500">
+                                        <div class="text-4xl mb-4">📊</div>
+                                        <p class="text-lg font-medium">Bitte wählen Sie mindestens eine KPI aus</p>
+                                        <p class="text-sm mt-2">Wählen Sie bis zu 3 KPIs aus, um deren erwarteten Impact zu bewerten.</p>
+                                    </div>
                                 </div>
+
+                                <!-- Verstecktes Input für Form-Submission -->
                                 <input type="hidden" name="selected_kpis" id="selectedKpisInput" value="[]">
                             </div>
                         </div>
@@ -90,280 +112,387 @@
                     </div>
                     
                     <div class="navigation-buttons">
-                        <a href="{{ url_for('technik_bewertung') }}" class="back-button">Zurück</a>
-                        <button type="submit" class="next-button">Weiter zur User-Bewertung</button>
+                        <a href="{{ url_for('technik_bewertung') }}" class="back-button">← Zurück zu Technik-Bewertung</a>
+                        <button type="submit" class="forward-button" onclick="if(window.stepNavigationManager) window.stepNavigationManager.navigateForward('/user_readiness')">Weiter zur User-Bewertung →</button>
                     </div>
                 </form>
             </div>
 
     <script>
-        // KPI-Auswahl Funktionalität
+        // Saubere KPI-Impact-Bewertung ohne veraltete Komponenten
         document.addEventListener('DOMContentLoaded', function() {
-            const kpiCheckboxes = document.querySelectorAll('.kpi-select-box');
-            const kpiSlidersContainer = document.getElementById('kpi-sliders-container');
-            const selectedKpisInput = document.getElementById('selectedKpisInput');
-            const roiSlider = document.getElementById('roiSlider');
-            const roiValue = document.getElementById('roiValue');
-            const maxKPIs = 3; // Maximale Anzahl an auswählbaren KPIs
+            const maxKPIs = 3;
+            let selectedKPIs = [];
+            let kpiImpacts = {};
             
-            // Speichert die ausgewählten KPIs - als globale Variable für Zugriff aus script.js
-            window.selectedKpisList = [];
+            // KPI-Definitionen mit Icons und Benchmarks
+            const kpiDefinitions = {
+                'umsatz': {
+                    name: 'Umsatz',
+                    icon: '💰',
+                    benchmarks: ['Keine Änderung', '2-5% Steigerung', '5-10% Steigerung', '10-20% Steigerung', '20%+ Steigerung']
+                },
+                'kosten': {
+                    name: 'Kosten',
+                    icon: '📉',
+                    benchmarks: ['Keine Einsparung', '5-10% Reduktion', '10-20% Reduktion', '20-35% Reduktion', '35%+ Reduktion']
+                },
+                'durchlaufzeit': {
+                    name: 'Durchlaufzeit',
+                    icon: '⚡',
+                    benchmarks: ['Keine Verbesserung', '10-20% schneller', '20-40% schneller', '40-60% schneller', '60%+ schneller']
+                },
+                'co2': {
+                    name: 'CO₂-Reduktion',
+                    icon: '🌱',
+                    benchmarks: ['Keine Reduktion', '5-15% weniger CO₂', '15-25% weniger CO₂', '25-40% weniger CO₂', '40%+ weniger CO₂']
+                },
+                'kundenbindung': {
+                    name: 'Kundenbindung',
+                    icon: '🤝',
+                    benchmarks: ['Keine Verbesserung', '5-10% höhere Bindung', '10-20% höhere Bindung', '20-30% höhere Bindung', '30%+ höhere Bindung']
+                },
+                'fehlerrate': {
+                    name: 'Fehlerrate',
+                    icon: '🎯',
+                    benchmarks: ['Keine Reduktion', '10-25% weniger Fehler', '25-50% weniger Fehler', '50-75% weniger Fehler', '75%+ weniger Fehler']
+                }
+            };
             
-            // Initialisiere das versteckte Input-Feld mit einem leeren Array
-            console.log("Initializing selectedKpisInput with empty array");
-            selectedKpisInput.value = JSON.stringify(window.selectedKpisList);
-            console.log("Initial selectedKpisInput value:", selectedKpisInput.value);
+            // Impact-Level-Definitionen
+            const impactLevels = [
+                {
+                    level: 1,
+                    label: 'Minimal',
+                    description: 'Kaum messbare Verbesserung',
+                    score: 0.0,
+                    colorClass: 'bg-red-500',
+                    bgClass: 'bg-red-100',
+                    textClass: 'text-red-700'
+                },
+                {
+                    level: 2,
+                    label: 'Gering',
+                    description: 'Kleine, spürbare Verbesserung',
+                    score: 0.25,
+                    colorClass: 'bg-orange-500',
+                    bgClass: 'bg-orange-100',
+                    textClass: 'text-orange-700'
+                },
+                {
+                    level: 3,
+                    label: 'Mittel',
+                    description: 'Deutlich messbare Verbesserung',
+                    score: 0.5,
+                    colorClass: 'bg-yellow-500',
+                    bgClass: 'bg-yellow-100',
+                    textClass: 'text-yellow-700'
+                },
+                {
+                    level: 4,
+                    label: 'Hoch',
+                    description: 'Starke, signifikante Verbesserung',
+                    score: 0.75,
+                    colorClass: 'bg-green-500',
+                    bgClass: 'bg-green-100',
+                    textClass: 'text-green-700'
+                },
+                {
+                    level: 5,
+                    label: 'Extrem',
+                    description: 'Transformative Verbesserung',
+                    score: 1.0,
+                    colorClass: 'bg-emerald-600',
+                    bgClass: 'bg-emerald-100',
+                    textClass: 'text-emerald-700'
+                }
+            ];
             
-            // Aktualisiert den ROI-Wert beim Verschieben des Sliders
-            if (roiSlider) {
-                roiSlider.addEventListener('input', function() {
-                    roiValue.textContent = this.value;
+            // CSS-Klassen für KPI-Auswahl-Items hinzufügen
+            const style = document.createElement('style');
+            style.textContent = `
+                .kpi-selection-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    padding: 0.75rem;
+                    border-radius: 0.5rem;
+                    border: 2px solid #e5e7eb;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    background-color: white;
+                }
+                .kpi-selection-item:hover {
+                    border-color: #d1d5db;
+                    background-color: #f9fafb;
+                }
+                .kpi-selection-item.selected {
+                    border-color: #3b82f6;
+                    background-color: #eff6ff;
+                    color: #1e40af;
+                }
+                .kpi-selection-item.disabled {
+                    border-color: #e5e7eb;
+                    background-color: #f3f4f6;
+                    color: #9ca3af;
+                    cursor: not-allowed;
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Event-Listener für KPI-Auswahl
+            const kpiSelectionItems = document.querySelectorAll('.kpi-selection-item');
+            kpiSelectionItems.forEach(item => {
+                const checkbox = item.querySelector('.kpi-checkbox');
+                const kpiKey = item.dataset.kpi;
+                
+                item.addEventListener('click', function(e) {
+                    if (e.target === checkbox) return; // Verhindere doppelte Events
+                    
+                    const isCurrentlySelected = selectedKPIs.includes(kpiKey);
+                    const isDisabled = !isCurrentlySelected && selectedKPIs.length >= maxKPIs;
+                    
+                    if (isDisabled) return;
+                    
+                    checkbox.checked = !checkbox.checked;
+                    handleKPISelection(kpiKey, checkbox.checked);
                 });
-            }
-            
-            // Event-Listener für KPI-Checkboxen
-            kpiCheckboxes.forEach(checkbox => {
+                
                 checkbox.addEventListener('change', function() {
-                    const kpiValue = this.value;
-                    const kpiText = this.nextElementSibling.textContent;
-                    
-                    if (this.checked) {
-                        // Prüfen, ob bereits 3 KPIs ausgewählt sind
-                        if (window.selectedKpisList.length >= maxKPIs) {
-                            // Wenn ja, die älteste Auswahl deaktivieren
-                            const oldestKPI = window.selectedKpisList.shift();
-                            document.querySelector(`.kpi-select-box[value="${oldestKPI.value}"]`).checked = false;
-                            // Den entsprechenden Slider entfernen
-                            const sliderToRemove = document.getElementById(`kpi-slider-${oldestKPI.value}`);
-                            if (sliderToRemove) {
-                                sliderToRemove.remove();
-                            }
-                        }
-                        
-                        // Neuen KPI hinzufügen mit explizitem Score 0.5 (Position 3)
-                        // Standardwert ist Position 3, was einem normalisierten Wert von 0.5 entspricht
-                        const defaultPosition = 3;
-                        const normalizedScore = normalizePositionToScore(defaultPosition);
-                        
-                        window.selectedKpisList.push({
-                            value: kpiValue,
-                            text: kpiText,
-                            score: normalizedScore,
-                            position: defaultPosition // Speichere auch die ursprüngliche Position
-                        });
-                        
-                        console.log(`Added new KPI: ${kpiText} with default score ${normalizedScore} (position ${defaultPosition})`);
-                        
-                        
-                        // Slider für diesen KPI erstellen
-                        createKPISlider(kpiValue, kpiText);
-                        
-                        // Aktualisiere das versteckte Input-Feld
-                        updateSelectedKpisInput();
-                    } else {
-                        // KPI aus der Liste entfernen
-                        const index = window.selectedKpisList.findIndex(kpi => kpi.value === kpiValue);
-                        if (index > -1) {
-                            window.selectedKpisList.splice(index, 1);
-                        }
-                        
-                        // Slider entfernen
-                        const sliderToRemove = document.getElementById(`kpi-slider-${kpiValue}`);
-                        if (sliderToRemove) {
-                            sliderToRemove.remove();
-                        }
-                        
-                        // Aktualisiere das versteckte Input-Feld
-                        updateSelectedKpisInput();
-                    }
-                    
-                    // Hinweis anzeigen, wenn keine KPIs ausgewählt sind
-                    const noKPIMessage = document.querySelector('.no-kpi-selected');
-                    if (noKPIMessage) {
-                        noKPIMessage.style.display = window.selectedKpisList.length === 0 ? 'block' : 'none';
-                    }
+                    handleKPISelection(kpiKey, this.checked);
                 });
             });
             
-            // Funktion zum Erstellen einer KPI-Punkteskala
-            function createKPISlider(kpiValue, kpiName) {
-                const sliderDiv = document.createElement('div');
-                sliderDiv.id = `kpi-slider-${kpiValue}`;
-                sliderDiv.className = 'kpi-slider-item';
+            // KPI-Auswahl behandeln
+            function handleKPISelection(kpiKey, isSelected) {
+                if (isSelected) {
+                    // Prüfe maximale Anzahl
+                    if (selectedKPIs.length >= maxKPIs) {
+                        // Entferne älteste Auswahl
+                        const removed = selectedKPIs.shift();
+                        delete kpiImpacts[removed];
+                        
+                        // Deaktiviere Checkbox
+                        const removedItem = document.querySelector(`[data-kpi="${removed}"]`);
+                        if (removedItem) {
+                            removedItem.querySelector('.kpi-checkbox').checked = false;
+                            removedItem.classList.remove('selected');
+                        }
+                        
+                        // Entferne Assessment
+                        const assessmentToRemove = document.getElementById(`kpi-assessment-${removed}`);
+                        if (assessmentToRemove) {
+                            assessmentToRemove.remove();
+                        }
+                    }
+                    
+                    selectedKPIs.push(kpiKey);
+                    
+                    // Setze Standard-Impact
+                    kpiImpacts[kpiKey] = {
+                        level: 3,
+                        score: 0.5,
+                        label: 'Mittel',
+                        description: 'Deutlich messbare Verbesserung'
+                    };
+                    
+                    // Erstelle Assessment
+                    createKPIAssessment(kpiKey);
+                } else {
+                    // Entferne KPI
+                    selectedKPIs = selectedKPIs.filter(key => key !== kpiKey);
+                    delete kpiImpacts[kpiKey];
+                    
+                    // Entferne Assessment
+                    const assessmentToRemove = document.getElementById(`kpi-assessment-${kpiKey}`);
+                    if (assessmentToRemove) {
+                        assessmentToRemove.remove();
+                    }
+                }
                 
-                sliderDiv.innerHTML = `
-                    <div class="kpi-slider-header">
-                        <span>${kpiName}</span>
-                        <span class="kpi-value-display" id="kpi-value-${kpiValue}">3</span>
+                updateUIState();
+                updateFormData();
+            }
+            
+            // KPI-Assessment erstellen
+            function createKPIAssessment(kpiKey) {
+                const kpi = kpiDefinitions[kpiKey];
+                const container = document.getElementById('kpi-assessments-container');
+                
+                const assessmentDiv = document.createElement('div');
+                assessmentDiv.id = `kpi-assessment-${kpiKey}`;
+                assessmentDiv.className = 'bg-white rounded-xl border-2 border-gray-200 p-6 kpi-transition hover:shadow-lg';
+                
+                assessmentDiv.innerHTML = `
+                    <!-- KPI Header -->
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">${kpi.icon}</span>
+                            <h3 class="text-lg font-semibold text-gray-800">${kpi.name}</h3>
+                        </div>
+                        <div class="kpi-current-label px-4 py-2 rounded-full font-medium text-sm bg-yellow-500 text-white">
+                            Mittel
+                        </div>
                     </div>
-                    <div class="points-scale-container">
-                        <div class="points-scale">
-                            <div class="point-item" data-value="1">
-                                <div class="point"></div>
-                                <div class="point-label">1</div>
-                            </div>
-                            <div class="point-item" data-value="2">
-                                <div class="point"></div>
-                                <div class="point-label">2</div>
-                            </div>
-                            <div class="point-item" data-value="3">
-                                <div class="point"></div>
-                                <div class="point-label">3</div>
-                            </div>
-                            <div class="point-item" data-value="4">
-                                <div class="point"></div>
-                                <div class="point-label">4</div>
-                            </div>
-                            <div class="point-item" data-value="5">
-                                <div class="point"></div>
-                                <div class="point-label">5</div>
+                    
+                    <!-- Impact-Skala -->
+                    <div class="space-y-4">
+                        <div class="text-center">
+                            <h4 class="text-sm font-medium text-gray-600 mb-4 flex items-center justify-center gap-2">
+                                <span>🎯</span>
+                                Erwarteter Impact
+                            </h4>
+                        </div>
+                        
+                        <!-- Grafische Impact-Punkte -->
+                        <div class="relative">
+                            <!-- Verbindungslinie -->
+                            <div class="absolute top-1/2 left-6 right-6 h-1 impact-connection-line rounded-full transform -translate-y-1/2 z-0"></div>
+                            
+                            <!-- Impact-Level -->
+                            <div class="flex justify-between items-center relative z-10">
+                                ${impactLevels.map(impact => `
+                                    <button
+                                        type="button"
+                                        class="impact-level-button group flex flex-col items-center p-2 rounded-lg kpi-transition-fast hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                        data-kpi="${kpiKey}"
+                                        data-level="${impact.level}"
+                                        title="${impact.label}: ${impact.description}"
+                                    >
+                                        <!-- Impact-Punkt -->
+                                        <div class="impact-point w-8 h-8 rounded-full border-3 flex items-center justify-center font-bold text-sm kpi-transition ${impact.level === 3 ? impact.colorClass + ' border-transparent text-white shadow-lg' : 'bg-gray-100 border-gray-300 text-gray-600 hover:scale-110'}">
+                                            ${impact.level}
+                                        </div>
+                                        
+                                        <!-- Label -->
+                                        <span class="impact-label mt-2 text-xs font-medium kpi-transition ${impact.level === 3 ? 'text-gray-800 font-semibold' : 'text-gray-600 group-hover:text-gray-800'}">
+                                            ${impact.label}
+                                        </span>
+                                    </button>
+                                `).join('')}
                             </div>
                         </div>
-                        <div class="scale-line"></div>
-                        <div class="scale-descriptions">
-                            <span class="scale-description-start">Kein Impact</span>
-                            <span class="scale-description-end">großer Impact</span>
+                        
+                        <!-- Benchmark-Orientierungshilfen -->
+                        <div class="mt-6 pt-4 border-t border-gray-100">
+                            <div class="benchmark-grid text-xs text-gray-500">
+                                ${kpi.benchmarks.map(benchmark => `
+                                    <div class="text-center leading-tight">${benchmark}</div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <!-- Aktuelle Auswahl Beschreibung -->
+                        <div class="impact-description mt-4 p-3 rounded-lg kpi-transition bg-yellow-100">
+                            <p class="text-sm font-medium text-yellow-700">
+                                Deutlich messbare Verbesserung
+                            </p>
                         </div>
                     </div>
                 `;
                 
-                // Hinweis ausblenden, wenn Punkteskala hinzugefügt wird
-                const noKPIMessage = document.querySelector('.no-kpi-selected');
-                if (noKPIMessage) {
-                    noKPIMessage.style.display = 'none';
-                }
+                container.appendChild(assessmentDiv);
                 
-                // Punkteskala zum Container hinzufügen
-                kpiSlidersContainer.appendChild(sliderDiv);
-                
-                // Event-Listener für die Punkte
-                const pointItems = sliderDiv.querySelectorAll('.point-item');
-                pointItems.forEach(pointItem => {
-                    pointItem.addEventListener('click', function() {
-                        // Aktiven Punkt markieren
-                        pointItems.forEach(item => item.classList.remove('active'));
-                        this.classList.add('active');
-                        
-                        const value = this.getAttribute('data-value');
-                        const valueDisplay = document.getElementById(`kpi-value-${kpiValue}`);
-                        if (valueDisplay) {
-                            valueDisplay.textContent = value;
-                        }
-                        
-                        // Aktualisiere den Score in der Liste
-                        const kpiIndex = window.selectedKpisList.findIndex(kpi => kpi.value === kpiValue);
-                        if (kpiIndex !== -1) {
-                            // Umrechnung von 1-5 auf 0-1 Skala für die Datenbank
-                            const positionValue = parseInt(value);
-                            const normalizedValue = normalizePositionToScore(positionValue);
-                            
-                            // Aktualisiere sowohl den Score als auch die Position
-                            window.selectedKpisList[kpiIndex].score = normalizedValue;
-                            window.selectedKpisList[kpiIndex].position = positionValue;
-                            
-                            console.log(`Updated KPI ${kpiValue} to position ${positionValue} with normalized score ${normalizedValue}`);
-                            
-                            updateSelectedKpisInput();
-                        }
+                // Event-Listener für Impact-Level
+                const impactButtons = assessmentDiv.querySelectorAll('.impact-level-button');
+                impactButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const level = parseInt(this.dataset.level);
+                        selectImpactLevel(kpiKey, level);
                     });
                 });
+            }
+            
+            // Impact-Level auswählen
+            function selectImpactLevel(kpiKey, level) {
+                const impact = impactLevels.find(i => i.level === level);
+                if (!impact) return;
                 
-                // Standardmäßig Punkt 3 auswählen und den Score aktualisieren
-                const defaultPoint = sliderDiv.querySelector('.point-item[data-value="3"]');
-                if (defaultPoint) {
-                    defaultPoint.classList.add('active');
+                // Aktualisiere Daten
+                kpiImpacts[kpiKey] = {
+                    level,
+                    score: impact.score,
+                    label: impact.label,
+                    description: impact.description
+                };
+                
+                const assessment = document.getElementById(`kpi-assessment-${kpiKey}`);
+                if (!assessment) return;
+                
+                // Aktualisiere UI
+                const buttons = assessment.querySelectorAll('.impact-level-button');
+                buttons.forEach(button => {
+                    const buttonLevel = parseInt(button.dataset.level);
+                    const point = button.querySelector('.impact-point');
+                    const label = button.querySelector('.impact-label');
+                    const buttonImpact = impactLevels.find(i => i.level === buttonLevel);
                     
-                    // Stelle sicher, dass der Score in der Liste aktualisiert wird
-                    const kpiIndex = window.selectedKpisList.findIndex(kpi => kpi.value === kpiValue);
-                    if (kpiIndex !== -1) {
-                        // Umrechnung von 1-5 auf 0-1 Skala für die Datenbank
-                        // Verwende die Normalisierungsfunktion für Konsistenz
-                        const positionValue = parseInt(defaultPoint.getAttribute('data-value'));
-                        const normalizedValue = normalizePositionToScore(positionValue);
-                        
-                        // Aktualisiere sowohl den Score als auch die Position
-                        window.selectedKpisList[kpiIndex].score = normalizedValue;
-                        window.selectedKpisList[kpiIndex].position = positionValue;
-                        
-                        console.log(`Set default position for KPI ${kpiValue} to ${positionValue} with normalized score ${normalizedValue}`);
-                        
-                        updateSelectedKpisInput();
+                    if (buttonLevel === level) {
+                        // Aktiv
+                        button.classList.add('impact-level-active');
+                        point.className = `impact-point w-8 h-8 rounded-full border-3 flex items-center justify-center font-bold text-sm kpi-transition ${buttonImpact.colorClass} border-transparent text-white shadow-lg`;
+                        label.className = 'impact-label mt-2 text-xs font-medium kpi-transition text-gray-800 font-semibold';
+                    } else {
+                        // Inaktiv
+                        button.classList.remove('impact-level-active');
+                        point.className = 'impact-point w-8 h-8 rounded-full border-3 flex items-center justify-center font-bold text-sm kpi-transition bg-gray-100 border-gray-300 text-gray-600 hover:scale-110';
+                        label.className = 'impact-label mt-2 text-xs font-medium kpi-transition text-gray-600 group-hover:text-gray-800';
                     }
+                });
+                
+                // Aktualisiere Header-Label
+                const headerLabel = assessment.querySelector('.kpi-current-label');
+                if (headerLabel) {
+                    headerLabel.className = `kpi-current-label px-4 py-2 rounded-full font-medium text-sm kpi-transition ${impact.colorClass} text-white`;
+                    headerLabel.textContent = impact.label;
+                }
+                
+                // Aktualisiere Beschreibung
+                const description = assessment.querySelector('.impact-description');
+                if (description) {
+                    description.className = `impact-description mt-4 p-3 rounded-lg kpi-transition ${impact.bgClass}`;
+                    description.querySelector('p').className = `text-sm font-medium ${impact.textClass}`;
+                    description.querySelector('p').textContent = impact.description;
+                }
+                
+                updateFormData();
+            }
+            
+            // UI-Status aktualisieren
+            function updateUIState() {
+                // KPI-Auswahl-Items aktualisieren
+                kpiSelectionItems.forEach(item => {
+                    const kpiKey = item.dataset.kpi;
+                    const isSelected = selectedKPIs.includes(kpiKey);
+                    const isDisabled = !isSelected && selectedKPIs.length >= maxKPIs;
+                    
+                    item.classList.toggle('selected', isSelected);
+                    item.classList.toggle('disabled', isDisabled);
+                });
+                
+                // No-KPI-Message anzeigen/verstecken
+                const noKPIMessage = document.getElementById('no-kpi-message');
+                if (noKPIMessage) {
+                    noKPIMessage.style.display = selectedKPIs.length === 0 ? 'block' : 'none';
                 }
             }
             
-            // Funktion zur Normalisierung der Position (1-5) zu einem Score (0-1)
-            function normalizePositionToScore(position) {
-                const positionValue = parseInt(position);
-                switch(positionValue) {
-                    case 1:
-                        return 0.0;  // Position 1 -> 0.0
-                    case 2:
-                        return 0.25; // Position 2 -> 0.25
-                    case 3:
-                        return 0.5;  // Position 3 -> 0.5
-                    case 4:
-                        return 0.75; // Position 4 -> 0.75
-                    case 5:
-                        return 1.0;  // Position 5 -> 1.0
-                    default:
-                        return 0.5;  // Standardwert für unbekannte Position
+            // Form-Daten aktualisieren
+            function updateFormData() {
+                const selectedKpisInput = document.getElementById('selectedKpisInput');
+                if (selectedKpisInput) {
+                    const kpiData = selectedKPIs.map(kpiKey => ({
+                        value: kpiKey,
+                        name: kpiDefinitions[kpiKey].name,
+                        ...kpiImpacts[kpiKey]
+                    }));
+                    selectedKpisInput.value = JSON.stringify(kpiData);
                 }
             }
             
-            // Funktion zum Aktualisieren des versteckten Input-Felds
-            function updateSelectedKpisInput() {
-                console.log("=== UPDATING SELECTED KPIS INPUT ===");
-                console.log("Selected KPIs list:", window.selectedKpisList);
-                const jsonString = JSON.stringify(window.selectedKpisList);
-                console.log("JSON string to be sent:", jsonString);
-                selectedKpisInput.value = jsonString;
-                console.log("Hidden input value set to:", selectedKpisInput.value);
-                console.log("Hidden input name:", selectedKpisInput.name);
-                console.log("=== END UPDATING SELECTED KPIS INPUT ===");
-            }
-            
-            // Form submission debugging
-            const kpiForm = document.getElementById('kpiForm');
-            if (kpiForm) {
-                kpiForm.addEventListener('submit', function(e) {
-                    // Make sure the hidden input is updated one last time before submission
-                    updateSelectedKpisInput();
-                    
-                    console.log('=== FORM SUBMISSION DEBUG ===');
-                    console.log('Form being submitted');
-                    console.log('Selected KPIs at submission:', window.selectedKpisList);
-                    console.log('Hidden input value at submission:', selectedKpisInput.value);
-                    console.log('Hidden input name:', selectedKpisInput.name);
-                    console.log('Form data:');
-                    const formData = new FormData(kpiForm);
-                    for (let [key, value] of formData.entries()) {
-                        console.log(`${key}: ${value}`);
-                    }
-                    
-                    // Additional debugging for the selected_kpis field
-                    console.log('Checking if selected_kpis is in formData:');
-                    console.log('Has selected_kpis:', formData.has('selected_kpis'));
-                    console.log('selected_kpis value:', formData.get('selected_kpis'));
-                    
-                    // If the selectedKpisList is empty, set a default empty array
-                    if (!selectedKpisInput.value || selectedKpisInput.value.trim() === '') {
-                        console.log('Setting default empty array for selected_kpis');
-                        selectedKpisInput.value = '[]';
-                    }
-                    
-                    // Double check the form has the correct input field
-                    console.log('Final check - Form elements:');
-                    for (let i = 0; i < kpiForm.elements.length; i++) {
-                        const element = kpiForm.elements[i];
-                        console.log(`Element ${i}: name=${element.name}, type=${element.type}, value=${element.value}`);
-                    }
-                    console.log('=== END FORM SUBMISSION DEBUG ===');
-                });
-            }
-                    
-                });
+            // Initialisierung
+            updateUIState();
+            updateFormData();
         });
-
     </script>
 {% endblock %}
