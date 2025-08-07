@@ -4,11 +4,13 @@
 
 {% block additional_head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='step-navigation.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='user-readiness-enhanced.css') }}">
     <script src="{{ url_for('static', filename='step-navigation.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='user-readiness-enhanced.js') }}" defer></script>
 {% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="user-readiness-container">
     <div class="technik-header">
         <div class="technik-header-content">
             <div class="technik-header-text">
@@ -18,148 +20,205 @@
         </div>
     </div>
     
-    <div class="technik-box">
-        <form id="userReadinessForm" action="{{ url_for('process_user_readiness') }}" method="POST">
-            <div class="all-questions">
-                <!-- Question 1 -->
-                <div class="question-item question-box">
-                    <div class="question-header">
+    <!-- Progress Indicator -->
+    <div class="progress-section">
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        <div class="progress-text">0 von 6 Fragen beantwortet</div>
+    </div>
+    
+    <form id="userReadinessForm" action="{{ url_for('process_user_readiness') }}" method="POST">
+        <!-- Group 1: Technologiewahrnehmung -->
+        <div id="group1" class="question-group active">
+            <div class="group-header">
+                <div class="group-icon">🧠</div>
+                <div class="group-title">
+                    <h3>Technologiewahrnehmung</h3>
+                    <p class="group-subtitle">Wie nehmen die Nutzer die Technologie wahr?</p>
+                </div>
+                <div class="group-status">✓</div>
+            </div>
+            <!-- Question 1: Leistungserwartung -->
+            <div class="question-item">
+                <div class="question-header">
+                    <div class="question-icon">⚡</div>
+                    <div class="question-content">
                         <h4>1. Leistungserwartung</h4>
                         <p>Nehmen die Nutzer die Technologie als nützlich für ihre komplexen Aufgaben wahr?</p>
                     </div>
-                    <div class="radio-container">
-                        <label class="radio-label">
-                            <input type="radio" id="pe_yes" name="performance_expectancy" value="yes" required>
-                            <span>Ja</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" id="pe_partially" name="performance_expectancy" value="partially">
-                            <span>Teilweise</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" id="pe_no" name="performance_expectancy" value="no">
-                            <span>Nein</span>
-                        </label>
-                    </div>
                 </div>
+                <div class="answer-buttons">
+                    <button type="button" class="answer-button positive" data-question="performance_expectancy" data-value="yes" data-icon="✓" tabindex="0">
+                        <input type="radio" name="performance_expectancy" value="yes" required>
+                        Ja
+                    </button>
+                    <button type="button" class="answer-button partial" data-question="performance_expectancy" data-value="partially" data-icon="≈" tabindex="0">
+                        <input type="radio" name="performance_expectancy" value="partially">
+                        Teilweise
+                    </button>
+                    <button type="button" class="answer-button negative" data-question="performance_expectancy" data-value="no" data-icon="✗" tabindex="0">
+                        <input type="radio" name="performance_expectancy" value="no">
+                        Nein
+                    </button>
+                </div>
+            </div>
                 
-                <!-- Question 2 -->
-                <div class="question-item question-box">
-                    <div class="question-header">
+            <!-- Question 2: Aufwandserwartung -->
+            <div class="question-item">
+                <div class="question-header">
+                    <div class="question-icon">🎯</div>
+                    <div class="question-content">
                         <h4>2. Aufwandserwartung</h4>
                         <p>Können Nutzer Aufgaben erledigen, ohne Hilfe zu benötigen?</p>
                     </div>
-                    <div class="radio-container">
-                        <label class="radio-label">
-                            <input type="radio" id="ee_yes" name="effort_expectancy" value="yes" required>
-                            <span>Ja</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" id="ee_partially" name="effort_expectancy" value="partially">
-                            <span>Teilweise</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" id="ee_no" name="effort_expectancy" value="no">
-                            <span>Nein</span>
-                        </label>
-                    </div>
                 </div>
+                <div class="answer-buttons">
+                    <button type="button" class="answer-button positive" data-question="effort_expectancy" data-value="yes" data-icon="✓" tabindex="0">
+                        <input type="radio" name="effort_expectancy" value="yes" required>
+                        Ja
+                    </button>
+                    <button type="button" class="answer-button partial" data-question="effort_expectancy" data-value="partially" data-icon="≈" tabindex="0">
+                        <input type="radio" name="effort_expectancy" value="partially">
+                        Teilweise
+                    </button>
+                    <button type="button" class="answer-button negative" data-question="effort_expectancy" data-value="no" data-icon="✗" tabindex="0">
+                        <input type="radio" name="effort_expectancy" value="no">
+                        Nein
+                    </button>
+                </div>
+            </div>
                 
-                <!-- Question 3 -->
-                <div class="question-item question-box">
-                    <div class="question-header">
+            <!-- Question 3: Sozialer Einfluss -->
+            <div class="question-item">
+                <div class="question-header">
+                    <div class="question-icon">👥</div>
+                    <div class="question-content">
                         <h4>3. Sozialer Einfluss</h4>
                         <p>Unterstützen oder empfehlen Kollegen oder Führungskräfte aktiv die Nutzung?</p>
                     </div>
-                    <div class="radio-container">
-                        <label class="radio-label">
-                            <input type="radio" id="si_yes" name="social_influence" value="yes" required>
-                            <span>Ja</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" id="si_partially" name="social_influence" value="partially">
-                            <span>Teilweise</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" id="si_no" name="social_influence" value="no">
-                            <span>Nein</span>
-                        </label>
-                    </div>
                 </div>
+                <div class="answer-buttons">
+                    <button type="button" class="answer-button positive" data-question="social_influence" data-value="yes" data-icon="✓" tabindex="0">
+                        <input type="radio" name="social_influence" value="yes" required>
+                        Ja
+                    </button>
+                    <button type="button" class="answer-button partial" data-question="social_influence" data-value="partially" data-icon="≈" tabindex="0">
+                        <input type="radio" name="social_influence" value="partially">
+                        Teilweise
+                    </button>
+                    <button type="button" class="answer-button negative" data-question="social_influence" data-value="no" data-icon="✗" tabindex="0">
+                        <input type="radio" name="social_influence" value="no">
+                        Nein
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Continue to Group 2 Button -->
+        <div class="group-navigation">
+            <button type="button" id="continueToGroup2" class="continue-button">
+                Weiter zu organisatorischen Bedingungen →
+            </button>
+        </div>
+        
+        <!-- Group 2: Organisationale Bedingungen -->
+        <div id="group2" class="question-group disabled" style="display: none;">
+            <div class="group-header">
+                <div class="group-icon">🏢</div>
+                <div class="group-title">
+                    <h3>Organisationale Bedingungen</h3>
+                    <p class="group-subtitle">Wie unterstützt die Organisation die Technologienutzung?</p>
+                </div>
+                <div class="group-status">✓</div>
+            </div>
                 
-                <!-- Question 4 -->
-                <div class="question-item question-box">
-                    <div class="question-header">
+            <!-- Question 4: Unterstützende Bedingungen -->
+            <div class="question-item">
+                <div class="question-header">
+                    <div class="question-icon">🛠️</div>
+                    <div class="question-content">
                         <h4>4. Unterstützende Bedingungen</h4>
                         <p>Sind Einarbeitung, Support und IT-Infrastruktur verfügbar und werden genutzt?</p>
                     </div>
-                    <div class="radio-container">
-                        <label class="radio-label">
-                            <input type="radio" id="fc_yes" name="facilitating_conditions" value="yes" required>
-                            <span>Ja</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" id="fc_partially" name="facilitating_conditions" value="partially">
-                            <span>Teilweise</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" id="fc_no" name="facilitating_conditions" value="no">
-                            <span>Nein</span>
-                        </label>
-                    </div>
                 </div>
+                <div class="answer-buttons">
+                    <button type="button" class="answer-button positive" data-question="facilitating_conditions" data-value="yes" data-icon="✓" tabindex="0">
+                        <input type="radio" name="facilitating_conditions" value="yes" required>
+                        Ja
+                    </button>
+                    <button type="button" class="answer-button partial" data-question="facilitating_conditions" data-value="partially" data-icon="≈" tabindex="0">
+                        <input type="radio" name="facilitating_conditions" value="partially">
+                        Teilweise
+                    </button>
+                    <button type="button" class="answer-button negative" data-question="facilitating_conditions" data-value="no" data-icon="✗" tabindex="0">
+                        <input type="radio" name="facilitating_conditions" value="no">
+                        Nein
+                    </button>
+                </div>
+            </div>
                 
-                <!-- Question 5 -->
-                <div class="question-item question-box">
-                    <div class="question-header">
+            <!-- Question 5: Vertrauen in Technologie -->
+            <div class="question-item">
+                <div class="question-header">
+                    <div class="question-icon">🔒</div>
+                    <div class="question-content">
                         <h4>5. Vertrauen in Technologie</h4>
                         <p>Würden Nutzer dem System in einer kritischen Arbeitssituation vertrauen?</p>
                     </div>
-                    <div class="radio-container">
-                        <label class="radio-label">
-                            <input type="radio" id="tt_yes" name="trust_in_tech" value="yes" required>
-                            <span>Ja</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" id="tt_partially" name="trust_in_tech" value="partially">
-                            <span>Teilweise</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" id="tt_no" name="trust_in_tech" value="no">
-                            <span>Nein</span>
-                        </label>
-                    </div>
                 </div>
+                <div class="answer-buttons">
+                    <button type="button" class="answer-button positive" data-question="trust_in_tech" data-value="yes" data-icon="✓" tabindex="0">
+                        <input type="radio" name="trust_in_tech" value="yes" required>
+                        Ja
+                    </button>
+                    <button type="button" class="answer-button partial" data-question="trust_in_tech" data-value="partially" data-icon="≈" tabindex="0">
+                        <input type="radio" name="trust_in_tech" value="partially">
+                        Teilweise
+                    </button>
+                    <button type="button" class="answer-button negative" data-question="trust_in_tech" data-value="no" data-icon="✗" tabindex="0">
+                        <input type="radio" name="trust_in_tech" value="no">
+                        Nein
+                    </button>
+                </div>
+            </div>
                 
-                <!-- Question 6 -->
-                <div class="question-item question-box">
-                    <div class="question-header">
+            <!-- Question 6: Wahrgenommene Bedrohung -->
+            <div class="question-item">
+                <div class="question-header">
+                    <div class="question-icon">⚠️</div>
+                    <div class="question-content">
                         <h4>6. Wahrgenommene Bedrohung</h4>
                         <p>Gibt es spürbaren Widerstand, Angst oder Fluktuation durch die Technologie?</p>
                     </div>
-                    <div class="radio-container">
-                        <label class="radio-label">
-                            <input type="radio" id="pt_yes" name="perceived_threat" value="yes" required>
-                            <span>Ja</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" id="pt_partially" name="perceived_threat" value="partially">
-                            <span>Teilweise</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" id="pt_no" name="perceived_threat" value="no">
-                            <span>Nein</span>
-                        </label>
-                    </div>
                 </div>
-                
-                <div class="navigation-buttons">
-                    <a href="{{ url_for('kpi_bewertung') }}" class="back-button">← Zurück zu KPI-Bewertung</a>
-                    <button type="submit" class="forward-button" onclick="if(window.stepNavigationManager) window.stepNavigationManager.navigateForward('/result')">Zum effic.io Score →</button>
+                <div class="answer-buttons">
+                    <button type="button" class="answer-button negative" data-question="perceived_threat" data-value="yes" data-icon="✗" tabindex="0">
+                        <input type="radio" name="perceived_threat" value="yes" required>
+                        Ja
+                    </button>
+                    <button type="button" class="answer-button partial" data-question="perceived_threat" data-value="partially" data-icon="≈" tabindex="0">
+                        <input type="radio" name="perceived_threat" value="partially">
+                        Teilweise
+                    </button>
+                    <button type="button" class="answer-button positive" data-question="perceived_threat" data-value="no" data-icon="✓" tabindex="0">
+                        <input type="radio" name="perceived_threat" value="no">
+                        Nein
+                    </button>
                 </div>
             </div>
-        </form>
-    </div>
+        </div>
+                
+        <!-- Final Navigation -->
+        <div class="final-navigation">
+            <a href="{{ url_for('technik_bewertung') }}" class="back-button">
+                ← Zurück zur Technik-Bewertung
+            </a>
+            <button type="submit" id="submitAssessment" class="submit-button" onclick="if(window.stepNavigationManager) window.stepNavigationManager.navigateForward('/result')">
+                <span>🚀</span> Zum effic.io Score →
+            </button>
+        </div>
+    </form>
 </div>
 
 <style>

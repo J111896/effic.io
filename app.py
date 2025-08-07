@@ -249,22 +249,22 @@ def process_kpi():
                     valid_kpis += 1
                 except (ValueError, TypeError) as e:
                     print(f"  KPI {kpi.get('text', 'Unknown')}: Error converting score to float: {e}")
-                    print(f"  Using default score 0.5 for this KPI")
-                    total_score += 0.5
+                    print(f"  Using default score 0.0 for this KPI")
+                    total_score += 0.0
                     valid_kpis += 1
             else:
                 print(f"  KPI {kpi.get('text', 'Unknown')}: No 'score' key found")
-                print(f"  Using default score 0.5 for this KPI")
-                total_score += 0.5
+                print(f"  Using default score 0.0 for this KPI")
+                total_score += 0.0
                 valid_kpis += 1
         
-        # Calculate the average score, default to 0.5 if no valid KPIs
-        kpi_score = total_score / valid_kpis if valid_kpis > 0 else 0.5
+        # Calculate the average score, default to 0.0 if no valid KPIs
+        kpi_score = total_score / valid_kpis if valid_kpis > 0 else 0.0
         print(f"Calculated KPI score (average): {kpi_score} from {valid_kpis} valid KPIs with total score {total_score}")
     except json.JSONDecodeError as e:
         print(f"Error parsing selected_kpis JSON: {e}")
         selected_kpis = []
-        kpi_score = 0.5  # Default to middle value if parsing fails
+        kpi_score = 0.0  # Default to 0.0 if parsing fails
         print(f"Using default KPI score: {kpi_score}")
     
     # Store the evaluation in the session
@@ -538,10 +538,20 @@ def calculate_result():
     print(f"Retrieved user_score from session: {user_score}")
     print(f"Full user_readiness_evaluation data: {user_readiness_evaluation}")
     
-    # Determine weights based on integration status
-    # If integration is 'teilweise' ('Partially') or 'vollständig' ('Yes'), increase user readiness weight
-    # If integration is 'nein' ('No') or 'schnittstellen' ('Schnittstellen definiert'), use default weights
-    if integration_status in ['teilweise', 'vollständig']:
+    # New rule: Check answers to technical questions 1-3
+    technik_details = technik_evaluation.get('details', {})
+    q1_answer = technik_details.get('q1', '')
+    q2_answer = technik_details.get('q2', '')
+    q3_answer = technik_details.get('q3', '')
+
+    # Check if any of the first three technical questions is 'nein'
+    if q1_answer == 'nein' or q2_answer == 'nein' or q3_answer == 'nein':
+        kpi_weight = 0.4
+        technik_weight = 0.4
+        user_weight = 0.2
+        weight_explanation = "Aufgrund kritischer 'Nein'-Antworten in den ersten drei technischen Fragen wurden Technik und KPIs höher gewichtet (je 40%), während die Nutzerbereitschaft mit 20% einfließt."
+    # Original logic based on integration status
+    elif integration_status in ['teilweise', 'vollständig']:
         kpi_weight = 0.3
         technik_weight = 0.3
         user_weight = 0.4
@@ -680,6 +690,76 @@ def result():
                           selected_kpis=selected_kpis,
                           user_readiness_details=user_readiness_details,
                           calculation=calculation)
+
+@app.route('/result-redesigned')
+def result_redesigned():
+    print("\n=== RESULT REDESIGNED ROUTE DEBUG ===\n")
+    
+    # Get the calculation from the session
+    calculation = session.get('calculation', {})
+    print(f"Retrieved calculation from session: {calculation}")
+    
+    # Extract scores
+    total_score = calculation.get('total_score', 0.0)
+    technik_score = calculation.get('technik_score', 0.0)
+    kpi_score = calculation.get('kpi_score', 0.0)  # Changed default to 0.0
+    user_score = calculation.get('user_score', 0.5)  # Default to 0.5 if not found
+    
+    print(f"Extracted scores: total={total_score}, technik={technik_score}, kpi={kpi_score}, user={user_score}")
+    
+    # Get weights
+    weights = calculation.get('weights', {})
+    technik_weight = weights.get('technik_weight', 0.4)
+    kpi_weight = weights.get('kpi_weight', 0.4)
+    user_weight = weights.get('user_weight', 0.2)
+    integration_status = weights.get('integration_status', 'nein')
+    
+    # Determine score interpretation and description
+    if total_score >= 0.8:
+        score_interpretation = "Ausgezeichnet"
+        score_description = "Ihr Projekt zeigt hervorragende Bereitschaft in allen Bereichen. Eine Implementierung wird stark empfohlen."
+        score_class = "excellent"
+    elif total_score >= 0.6:
+        score_interpretation = "Gut"
+        score_description = "Ihr Projekt ist gut aufgestellt. Mit kleineren Optimierungen kann eine erfolgreiche Implementierung erreicht werden."
+        score_class = "good"
+    elif total_score >= 0.4:
+        score_interpretation = "Durchschnittlich"
+        score_description = "Ihr Projekt zeigt Potenzial, benötigt aber noch Verbesserungen in einigen Bereichen. Eine Pilotphase wird empfohlen."
+        score_class = "average"
+    elif total_score >= 0.2:
+        score_interpretation = "Verbesserungsbedürftig"
+        score_description = "Ihr Projekt hat Grundlagen, aber wichtige Bereiche müssen gestärkt werden, bevor eine Implementierung sinnvoll ist."
+        score_class = "poor"
+    else:
+        score_interpretation = "Kritisch"
+        score_description = "Ihr Projekt benötigt erhebliche Verbesserungen in mehreren Bereichen. Eine Überarbeitung der Strategie wird empfohlen."
+        score_class = "bad"
+    
+    # Get technical details
+    technik_details = calculation.get('technik_details', {})
+    
+    # Get user readiness details
+    user_readiness_details = calculation.get('user_readiness_details', {})
+    
+    print(f"Rendering redesigned result with score class: {score_class}")
+    print("\n=== END RESULT REDESIGNED ROUTE DEBUG ===\n")
+    
+    # Render the redesigned result template
+    return render_template('result-redesigned.html',
+                          total_score=total_score,
+                          technik_score=technik_score,
+                          kpi_score=kpi_score,
+                          user_score=user_score,
+                          technik_weight=technik_weight,
+                          kpi_weight=kpi_weight,
+                          user_weight=user_weight,
+                          integration_status=integration_status,
+                          score_interpretation=score_interpretation,
+                          score_description=score_description,
+                          score_class=score_class,
+                          technik_details=technik_details,
+                          user_readiness_details=user_readiness_details)
 
 @app.route('/save_calculation', methods=['POST'])
 @login_required

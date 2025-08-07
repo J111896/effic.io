@@ -4,6 +4,7 @@
 
 {% block additional_head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='step-navigation.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='technik-enhanced.css') }}">
     <script src="{{ url_for('static', filename='step-navigation.js') }}" defer></script>
 {% endblock %}
 
@@ -24,19 +25,18 @@
                         <!-- Konzeptstatus -->
                         <div class="question-item question-box">
                             <div class="question-header">
-
-                                <h4>Konzeptstatus: Gibt es bereits ein technisches Konzept oder eine nachvollziehbare Idee für die Lösung?</h4>
+                                <h4><span class="question-icon">🎯</span> Konzeptstatus: Gibt es bereits ein technisches Konzept oder eine nachvollziehbare Idee für die Lösung?</h4>
                             </div>
                             <div class="radio-container">
-                                <label class="radio-label">
+                                <label class="radio-label" data-type="negative">
                                     <input type="radio" name="concept_status" value="nein" onclick="checkForNextQuestion()">
                                     <span>Nein</span>
                                 </label>
-                                <label class="radio-label">
+                                <label class="radio-label" data-type="partial">
                                     <input type="radio" name="concept_status" value="skizzen" onclick="showNextQuestion()">
                                     <span>Erste Skizzen / Usecase-Idee vorhanden</span>
                                 </label>
-                                <label class="radio-label">
+                                <label class="radio-label" data-type="positive">
                                     <input type="radio" name="concept_status" value="konzept" onclick="showNextQuestion()">
                                     <span>Ausgearbeitetes technisches Konzept vorhanden</span>
                                 </label>
@@ -46,19 +46,18 @@
                         <!-- Validierung -->
                         <div class="question-item question-box" id="validation" style="display: none;">
                             <div class="question-header">
-
-                                <h4>Validierung: Wurde die technische Machbarkeit bereits in einem Proof of Concept (PoC) getestet?</h4>
+                                <h4><span class="question-icon">🔬</span> Validierung: Wurde die technische Machbarkeit bereits in einem Proof of Concept (PoC) getestet?</h4>
                             </div>
                             <div class="radio-container">
-                                <label class="radio-label">
+                                <label class="radio-label" data-type="negative">
                                     <input type="radio" name="validation" value="nein" onclick="checkForNextQuestion()">
                                     <span>Noch nicht</span>
                                 </label>
-                                <label class="radio-label">
+                                <label class="radio-label" data-type="partial">
                                     <input type="radio" name="validation" value="intern" onclick="showNextQuestion()">
                                     <span>Intern getestet (Laborsettings / Simulation)</span>
                                 </label>
-                                <label class="radio-label">
+                                <label class="radio-label" data-type="positive">
                                     <input type="radio" name="validation" value="extern" onclick="showNextQuestion()">
                                     <span>Extern / realitätsnah validiert (Pilotumgebung)</span>
                                 </label>
@@ -68,19 +67,18 @@
                         <!-- Prototypstatus -->
                         <div class="question-item question-box" id="prototype" style="display: none;">
                             <div class="question-header">
-
-                                <h4>Prototypstatus: Gibt es bereits einen funktionierenden Prototyp?</h4>
+                                <h4><span class="question-icon">⚙️</span> Prototypstatus: Gibt es bereits einen funktionierenden Prototyp?</h4>
                             </div>
                             <div class="radio-container">
-                                <label class="radio-label">
+                                <label class="radio-label" data-type="negative">
                                     <input type="radio" name="prototype" value="nein" onclick="checkForNextQuestion()">
                                     <span>Nein</span>
                                 </label>
-                                <label class="radio-label">
+                                <label class="radio-label" data-type="partial">
                                     <input type="radio" name="prototype" value="entwicklung" onclick="showNextQuestion()">
                                     <span>Prototyp in Entwicklung</span>
                                 </label>
-                                <label class="radio-label">
+                                <label class="radio-label" data-type="positive">
                                     <input type="radio" name="prototype" value="test" onclick="showNextQuestion()">
                                     <span>Prototyp im Testeinsatz</span>
                                 </label>
@@ -90,23 +88,22 @@
                         <!-- Integration -->
                         <div class="question-item question-box" id="integration" style="display: none;">
                             <div class="question-header">
-
-                                <h4>Integration: Ist die Lösung bereits in bestehende Systeme oder Prozesse integriert?</h4>
+                                <h4><span class="question-icon">🔗</span> Integration: Ist die Lösung bereits in bestehende Systeme oder Prozesse integriert?</h4>
                             </div>
                             <div class="radio-container">
-                                <label class="radio-label">
+                                <label class="radio-label" data-type="negative">
                                     <input type="radio" name="integration" value="nein" onclick="checkForNextQuestion()">
                                     <span>Noch nicht</span>
                                 </label>
-                                <label class="radio-label">
+                                <label class="radio-label" data-type="partial">
                                     <input type="radio" name="integration" value="schnittstellen" onclick="showNextQuestion()">
                                     <span>Schnittstellen definiert</span>
                                 </label>
-                                <label class="radio-label">
+                                <label class="radio-label" data-type="partial">
                                     <input type="radio" name="integration" value="teilweise" onclick="showNextQuestion()">
                                     <span>Teilweise integriert</span>
                                 </label>
-                                <label class="radio-label">
+                                <label class="radio-label" data-type="positive">
                                     <input type="radio" name="integration" value="vollständig" onclick="showNextQuestion()">
                                     <span>Vollständig integriert</span>
                                 </label>
@@ -116,19 +113,18 @@
                         <!-- Betriebsreife -->
                         <div class="question-item question-box" id="maturity" style="display: none;">
                             <div class="question-header">
-
-                                <h4>Betriebsreife: Ist die Technologie marktreif oder in produktivem Einsatz?</h4>
+                                <h4><span class="question-icon">🚀</span> Betriebsreife: Ist die Technologie marktreif oder in produktivem Einsatz?</h4>
                             </div>
                             <div class="radio-container">
-                                <label class="radio-label">
+                                <label class="radio-label" data-type="negative">
                                     <input type="radio" name="maturity" value="nein" onclick="document.getElementById('nextButton').style.display = 'block'">
                                     <span>Nein</span>
                                 </label>
-                                <label class="radio-label">
+                                <label class="radio-label" data-type="partial">
                                     <input type="radio" name="maturity" value="erste" onclick="document.getElementById('nextButton').style.display = 'block'">
                                     <span>Erste Anwender:innen nutzen sie</span>
                                 </label>
-                                <label class="radio-label">
+                                <label class="radio-label" data-type="positive">
                                     <input type="radio" name="maturity" value="produktiv" onclick="document.getElementById('nextButton').style.display = 'block'">
                                     <span>Produktiv in mehreren Umgebungen</span>
                                 </label>
@@ -137,7 +133,7 @@
                     </div>
                     
                     <div class="navigation-buttons">
-                        <a href="/" class="back-button">← Zurück zum Start</a>
+                        <a href="{{ url_for('kpi_bewertung') }}" class="back-button">← Zurück zu KPI-Bewertung</a>
                         <button type="submit" class="forward-button" id="nextButton" style="display: none;" onclick="if(window.stepNavigationManager) window.stepNavigationManager.navigateForward('/kpi_bewertung')">Weiter zur KPI-Bewertung →</button>
                     </div>
                 </form>
