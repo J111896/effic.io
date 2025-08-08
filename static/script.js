@@ -198,22 +198,51 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Use the same normalization function as in kpi.html
                         const score = position === 1 ? 0.0 :
                                      position === 2 ? 0.25 :
-                                     position === 3 ? 0.5 :
-                                     position === 4 ? 0.75 :
                                      position === 5 ? 1.0 : 0.5;
-                        
-                        return {
-                            value: kpiValue,
-                            text: document.querySelector(`.kpi-select-box[value="${kpiValue}"]`).nextElementSibling.textContent,
-                            position: position,
-                            score: score
-                        };
+                        return { value: kpiValue, text: document.querySelector(`.kpi-select-box[value="${kpiValue}"]`).nextElementSibling.textContent, score: score, position: position };
                     });
-                    
                     selectedKpisInput.value = JSON.stringify(kpiObjects);
-                    console.log("Aktualisierter Wert (Fallback):", selectedKpisInput.value);
+                    console.log("Aktualisierter Wert (lokal):", selectedKpisInput.value);
                 }
             }
         });
+    }
+
+    // Function to toggle details sections in result-redesigned.html
+    window.toggleDetails = function(id) {
+        const content = document.getElementById(id + '-content');
+        const toggleIcon = document.getElementById(id + '-toggle');
+
+        if (content.classList.contains('max-h-0')) {
+            content.classList.remove('max-h-0');
+            content.classList.add('max-h-screen');
+            toggleIcon.classList.add('rotate-180');
+        } else {
+            content.classList.remove('max-h-screen');
+            content.classList.add('max-h-0');
+            toggleIcon.classList.remove('rotate-180');
+        }
+    };
+
+    // Placeholder functions for action buttons
+    window.downloadReport = function() {
+        alert('Download Report functionality coming soon!');
+    };
+
+    window.giveFeedback = function() {
+        alert('Feedback functionality coming soon!');
+    };
+
+    // Initialize score card color based on total score
+    const scoreHeroCard = document.querySelector('.score-hero-card');
+    if (scoreHeroCard) {
+        const totalScore = parseFloat(scoreHeroCard.dataset.totalScore);
+        if (totalScore >= 80) {
+            scoreHeroCard.classList.add('score-hero-card-green');
+        } else if (totalScore >= 60) {
+            scoreHeroCard.classList.add('score-hero-card-yellow');
+        } else {
+            scoreHeroCard.classList.add('score-hero-card-red');
+        }
     }
 });

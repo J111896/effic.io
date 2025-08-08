@@ -1,155 +1,181 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ergebnis - effic.io</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='result-redesigned.css') }}">
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
-</head>
-<body>
-    <div class="result-redesigned">
-        <!-- Header -->
-        <div class="result-header-redesigned">
-            <a href="{{ url_for('index') }}" class="back-link-redesigned">
-                <span>←</span>
-                <span>Zurück zur Bewertung</span>
-            </a>
-            <h1 class="page-title">Ihr Bewertungsergebnis</h1>
-            <div></div> <!-- Spacer for flex layout -->
-        </div>
+{% extends 'base.html' %}
 
-        <!-- Main Score Card -->
-        <div class="score-hero-card score-{{ score_class }}">
-            <div class="score-circle">
-                <div class="score-circle-bg">
-                    <div class="score-circle-fill" style="--score-angle: {{ (total_score * 360)|round }}deg;"></div>
-                    <div class="score-circle-inner">
-                        <div class="score-value">{{ (total_score * 100)|round }}</div>
-                        <div class="score-percentage">%</div>
-                    </div>
-                </div>
+{% block title %}Ergebnis - effic.io{% endblock %}
+
+{% block additional_head %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .score-decimal {
+            /* Color will be set by JavaScript */
+        }
+        .clickable-subscore {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .clickable-subscore:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .details-expanded {
+            max-height: 1000px !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="min-h-screen bg-gray-100 flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
+        <!-- Results Header -->
+        <div class="w-full max-w-4xl mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <a href="{{ url_for('index') }}" class="flex items-center text-gray-600 hover:text-gray-900 text-sm font-medium">
+                    <span class="mr-1 text-lg">←</span>
+                    <span>Zurück zur Bewertung</span>
+                </a>
+                <div></div>
             </div>
-            
-            <h2 class="score-status">{{ score_interpretation }}</h2>
-            <p class="score-description">{{ score_description }}</p>
-            
-            <!-- Weighting Information -->
-            <div class="weighting-info">
-                <span>⚖️</span>
-                <span>Gewichtung anzeigen</span>
-                <div class="weighting-tooltip">
-                    Gewichtung: Technik {{ (technik_weight * 100)|round }}%, KPI {{ (kpi_weight * 100)|round }}%, Nutzer {{ (user_weight * 100)|round }}%
-                    {% if integration_status == 'ja' %}
-                    – weil Integration = JA
-                    {% else %}
-                    – weil Integration = NEIN
-                    {% endif %}
-                </div>
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Ihr Bewertungsergebnis</h2>
+                <p class="text-gray-600">Detaillierte Analyse Ihres KI-Projekts</p>
             </div>
         </div>
 
-        <!-- Sub-scores Section -->
-        <div class="subscores-card">
-            <h3 class="subscores-title">Detailbewertung</h3>
-            
-            <!-- Technical Score -->
-            <div class="subscore-item">
-                <div class="subscore-icon">⚙️</div>
-                <div class="subscore-content">
-                    <div class="subscore-label">Technische Bereitschaft</div>
-                    <div class="subscore-bar-container">
-                        <div class="subscore-bar technik-bar" data-width="{{ (technik_score * 100)|round }}"></div>
+        <!-- Main Score Card with Decimal Display -->
+        <div class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-8 mb-8 text-center">
+            <div class="flex flex-col items-center mb-6">
+                <div class="relative w-56 h-56 mb-6">
+                    <div class="absolute inset-0 rounded-full border-8 border-gray-200 flex items-center justify-center">
+                        <div class="score-decimal w-48 h-48 rounded-full flex items-center justify-center text-white shadow-2xl">
+                            <div class="text-center">
+                                <div class="text-6xl font-bold mb-2">{{ "%.2f"|format(total_score) }}</div>
+                                <div class="text-lg font-medium opacity-90">Wirkungsscore</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="subscore-value">{{ (technik_score * 100)|round }}%</div>
+                
+                <h2 class="text-3xl font-semibold text-gray-800 mb-2">{{ score_interpretation }}</h2>
+                <p class="text-gray-600 mb-6 max-w-2xl">{{ score_description }}</p>
+                
+                <!-- Weighting Information -->
+                <div class="relative group">
+                    <button class="flex items-center text-blue-600 hover:text-blue-800 focus:outline-none">
+                        <span class="text-xl mr-2">⚖️</span>
+                        <span class="text-sm font-medium">Gewichtung anzeigen</span>
+                    </button>
+                    <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+                        Gewichtung: Technik {{ (technik_weight * 100)|round }}%, KPI {{ (kpi_weight * 100)|round }}%, Nutzer {{ (user_weight * 100)|round }}%
+                        {% if integration_status == 'ja' %}
+                        – weil Integration = JA
+                        {% else %}
+                        – weil Integration = NEIN
+                        {% endif %}
+                        <div class="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-8 border-x-transparent border-t-8 border-t-gray-800"></div>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        <!-- Clickable Sub-scores Section -->
+        <div class="w-full max-w-4xl mb-8">
+            <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Detailbewertung</h3>
             
-            <!-- KPI Score -->
-            <div class="subscore-item">
-                <div class="subscore-icon">📈</div>
-                <div class="subscore-content">
-                    <div class="subscore-label">Business KPI Impact</div>
-                    <div class="subscore-bar-container">
-                        <div class="subscore-bar kpi-bar" data-width="{{ (kpi_score * 100)|round }}"></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Technical Score Card -->
+                <div class="clickable-subscore bg-white rounded-xl shadow-lg p-6 text-center" onclick="toggleDetails('technical-details')">
+                    <div class="text-4xl mb-4">⚙️</div>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">Technische Bereitschaft</h4>
+                    <div class="text-3xl font-bold text-blue-600 mb-3">{{ "%.2f"|format(technik_score) }}</div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div class="bg-blue-500 h-3 rounded-full transition-all duration-700 ease-out" style="width: {{ (technik_score * 100)|round }}%"></div>
                     </div>
+                    <p class="text-sm text-gray-600 mt-3">Klicken für Details</p>
                 </div>
-                <div class="subscore-value">{{ (kpi_score * 100)|round }}%</div>
-            </div>
-            
-            <!-- User Score -->
-            <div class="subscore-item">
-                <div class="subscore-icon">👥</div>
-                <div class="subscore-content">
-                    <div class="subscore-label">Nutzerbereitschaft</div>
-                    <div class="subscore-bar-container">
-                        <div class="subscore-bar nutzer-bar" data-width="{{ (user_score * 100)|round }}"></div>
+                
+                <!-- KPI Score Card -->
+                <div class="clickable-subscore bg-white rounded-xl shadow-lg p-6 text-center" onclick="toggleDetails('kpi-details')">
+                    <div class="text-4xl mb-4">📈</div>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">Business KPI Impact</h4>
+                    <div class="text-3xl font-bold text-green-600 mb-3">{{ "%.2f"|format(kpi_score) }}</div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div class="bg-green-500 h-3 rounded-full transition-all duration-700 ease-out" style="width: {{ (kpi_score * 100)|round }}%"></div>
                     </div>
+                    <p class="text-sm text-gray-600 mt-3">Klicken für Details</p>
                 </div>
-                <div class="subscore-value">{{ (user_score * 100)|round }}%</div>
+                
+                <!-- User Score Card -->
+                <div class="clickable-subscore bg-white rounded-xl shadow-lg p-6 text-center" onclick="toggleDetails('user-details')">
+                    <div class="text-4xl mb-4">👥</div>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">Nutzerbereitschaft</h4>
+                    <div class="text-3xl font-bold text-purple-600 mb-3">{{ "%.2f"|format(user_score) }}</div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div class="bg-purple-500 h-3 rounded-full transition-all duration-700 ease-out" style="width: {{ (user_score * 100)|round }}%"></div>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-3">Klicken für Details</p>
+                </div>
             </div>
         </div>
 
         <!-- Benchmark Teaser -->
-        <div class="benchmark-teaser">
-            <span class="benchmark-icon">📊</span>
-            <h3 class="benchmark-title">Benchmark-Insights: Coming soon</h3>
-            <p class="benchmark-description">Vergleichen Sie Ihr Projekt bald mit Branchendurchschnitten und erhalten Sie wertvolle Einblicke.</p>
+        <div class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 mb-8 flex items-center space-x-4">
+            <div class="text-4xl">📊</div>
+            <div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-1">Benchmark-Insights: Coming soon</h3>
+                <p class="text-gray-600">Vergleichen Sie Ihr Projekt bald mit Branchendurchschnitten und erhalten Sie wertvolle Einblicke.</p>
+            </div>
         </div>
 
         <!-- Action Buttons -->
-        <div class="action-buttons">
-            <a href="{{ url_for('index') }}" class="action-button primary">
-                <span class="action-button-icon">🔄</span>
+        <div class="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            <a href="{{ url_for('index') }}" class="flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-8 shadow-md">
+                <span class="mr-2 text-xl">🔄</span>
                 <span>Bewertung anpassen</span>
             </a>
-            <a href="#" class="action-button" onclick="downloadReport()">
-                <span class="action-button-icon">📥</span>
+            <a href="#" class="flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-8 shadow-md" onclick="downloadReport()">
+                <span class="mr-2 text-xl">📥</span>
                 <span>Ergebnisbericht herunterladen</span>
             </a>
-            <a href="#" class="action-button" onclick="giveFeedback()">
-                <span class="action-button-icon">🗣️</span>
+            <a href="#" class="flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-8 shadow-md" onclick="giveFeedback()">
+                <span class="mr-2 text-xl">🗣️</span>
                 <span>Feedback geben</span>
             </a>
         </div>
 
         <!-- Collapsible Technical Details -->
-        <div class="details-section" id="technical-details">
-            <div class="details-header" onclick="toggleDetails('technical-details')">
-                <h4 class="details-title">⚙️ Technische Details</h4>
-                <span class="details-toggle">▼</span>
+        <div class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 mb-8">
+            <div class="flex justify-between items-center cursor-pointer" onclick="toggleDetails('technical-details')">
+                <h4 class="text-xl font-semibold text-gray-800">⚙️ Technische Details</h4>
+                <span class="text-gray-500 text-lg transform transition-transform duration-300" id="technical-details-toggle">▼</span>
             </div>
-            <div class="details-content">
+            <div class="mt-4 overflow-hidden transition-all duration-500 ease-in-out max-h-0" id="technical-details-content">
                 {% if technik_details %}
-                <div class="detail-grid">
-                    <div class="detail-item">
-                        <strong>Konzept:</strong> 
-                        <span class="detail-value {{ 'positive' if technik_details.concept == 'ja' else 'negative' }}">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <strong class="block text-gray-700">Konzept:</strong> 
+                        <span class="text-lg font-medium {{ 'text-green-600' if technik_details.concept in ['konzept'] else 'text-yellow-600' if technik_details.concept in ['skizzen'] else 'text-red-600' }}">
                             {{ technik_details.concept|title }}
                         </span>
                     </div>
-                    <div class="detail-item">
-                        <strong>Validierung:</strong> 
-                        <span class="detail-value {{ 'positive' if technik_details.validation == 'ja' else 'negative' }}">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <strong class="block text-gray-700">Validierung:</strong> 
+                        <span class="text-lg font-medium {{ 'text-green-600' if technik_details.validation == 'extern' else 'text-yellow-600' if technik_details.validation == 'intern' else 'text-red-600' }}">
                             {{ technik_details.validation|title }}
                         </span>
                     </div>
-                    <div class="detail-item">
-                        <strong>Prototyp:</strong> 
-                        <span class="detail-value {{ 'positive' if technik_details.prototype == 'ja' else 'negative' }}">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <strong class="block text-gray-700">Prototyp:</strong> 
+                        <span class="text-lg font-medium {{ 'text-green-600' if technik_details.prototype == 'test' else 'text-yellow-600' if technik_details.prototype == 'entwicklung' else 'text-red-600' }}">
                             {{ technik_details.prototype|title }}
                         </span>
                     </div>
-                    <div class="detail-item">
-                        <strong>Integration:</strong> 
-                        <span class="detail-value {{ 'positive' if technik_details.integration == 'ja' else 'negative' }}">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <strong class="block text-gray-700">Integration:</strong> 
+                        <span class="text-lg font-medium {{ 'text-green-600' if technik_details.integration == 'vollständig' else 'text-yellow-600' if technik_details.integration in ['teilweise', 'schnittstellen'] else 'text-red-600' }}">
                             {{ technik_details.integration|title }}
                         </span>
                     </div>
-                    <div class="detail-item">
-                        <strong>Marktreife:</strong> 
-                        <span class="detail-value {{ 'positive' if technik_details.maturity == 'ja' else 'negative' }}">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <strong class="block text-gray-700">Marktreife:</strong> 
+                        <span class="text-lg font-medium {{ 'text-green-600' if technik_details.maturity == 'produktiv' else 'text-yellow-600' if technik_details.maturity == 'erste' else 'text-red-600' }}">
                             {{ technik_details.maturity|title }}
                         </span>
                     </div>
@@ -159,71 +185,71 @@
         </div>
 
         <!-- Collapsible KPI Details -->
-        <div class="details-section" id="kpi-details">
-            <div class="details-header" onclick="toggleDetails('kpi-details')">
-                <h4 class="details-title">📈 KPI Details</h4>
-                <span class="details-toggle">▼</span>
+        <div class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 mb-8">
+            <div class="flex justify-between items-center cursor-pointer" onclick="toggleDetails('kpi-details')">
+                <h4 class="text-xl font-semibold text-gray-800">📈 KPI Details</h4>
+                <span class="text-gray-500 text-lg transform transition-transform duration-300" id="kpi-details-toggle">▼</span>
             </div>
-            <div class="details-content">
-                <div class="kpi-summary">
-                    <p><strong>KPI Score:</strong> {{ (kpi_score * 100)|round }}%</p>
-                    <p class="kpi-interpretation">
-                        {% if kpi_score >= 0.8 %}
-                        Ausgezeichnete KPI-Performance erwartet. Ihr Projekt zeigt starkes Potenzial für messbare Geschäftsergebnisse.
-                        {% elif kpi_score >= 0.6 %}
-                        Gute KPI-Performance erwartet. Solide Grundlage für Geschäftswert.
-                        {% elif kpi_score >= 0.4 %}
-                        Moderate KPI-Performance. Überprüfen Sie die Auswahl und Gewichtung Ihrer KPIs.
-                        {% else %}
-                        Niedrige KPI-Performance. Überdenken Sie Ihre KPI-Strategie und -Auswahl.
-                        {% endif %}
-                    </p>
+            <div class="mt-4 overflow-hidden transition-all duration-500 ease-in-out max-h-0" id="kpi-details-content">
+                {% if selected_kpis %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    {% for kpi in selected_kpis %}
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <strong class="block text-gray-700">{{ kpi.name }}:</strong> 
+                        <p class="text-gray-600">{{ kpi.description }}</p>
+                        <p class="text-gray-700 mt-2"><strong>Potenzial:</strong> <span class="font-semibold">{{ kpi.potential }}</span></p>
+                        <p class="text-gray-700"><strong>Relevanz:</strong> <span class="font-semibold">{{ kpi.relevance }}</span></p>
+                    </div>
+                    {% endfor %}
                 </div>
+                {% else %}
+                <p class="text-gray-600 mt-4">Keine KPIs ausgewählt.</p>
+                {% endif %}
             </div>
         </div>
 
         <!-- Collapsible User Readiness Details -->
-        <div class="details-section" id="user-details">
-            <div class="details-header" onclick="toggleDetails('user-details')">
-                <h4 class="details-title">👥 Nutzerbereitschaft Details</h4>
-                <span class="details-toggle">▼</span>
+        <div class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 mb-8">
+            <div class="flex justify-between items-center cursor-pointer" onclick="toggleDetails('user-details')">
+                <h4 class="text-xl font-semibold text-gray-800">👥 Nutzerbereitschaft Details</h4>
+                <span class="text-gray-500 text-lg transform transition-transform duration-300" id="user-details-toggle">▼</span>
             </div>
-            <div class="details-content">
+            <div class="mt-4 overflow-hidden transition-all duration-500 ease-in-out max-h-0" id="user-details-content">
                 {% if user_readiness_details %}
-                <div class="detail-grid">
-                    <div class="detail-item">
-                        <strong>Leistungserwartung:</strong> 
-                        <span class="detail-value score-{{ user_readiness_details.performance_expectancy }}">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <strong class="block text-gray-700">Leistungserwartung:</strong> 
+                        <span class="text-lg font-medium {{ 'text-green-600' if user_readiness_details.performance_expectancy == 'hoch' else ('text-yellow-600' if user_readiness_details.performance_expectancy == 'mittel' else 'text-red-600') }}">
                             {{ user_readiness_details.performance_expectancy|title }}
                         </span>
                     </div>
-                    <div class="detail-item">
-                        <strong>Aufwandserwartung:</strong> 
-                        <span class="detail-value score-{{ user_readiness_details.effort_expectancy }}">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <strong class="block text-gray-700">Aufwandserwartung:</strong> 
+                        <span class="text-lg font-medium {{ 'text-green-600' if user_readiness_details.effort_expectancy == 'hoch' else ('text-yellow-600' if user_readiness_details.effort_expectancy == 'mittel' else 'text-red-600') }}">
                             {{ user_readiness_details.effort_expectancy|title }}
                         </span>
                     </div>
-                    <div class="detail-item">
-                        <strong>Sozialer Einfluss:</strong> 
-                        <span class="detail-value score-{{ user_readiness_details.social_influence }}">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <strong class="block text-gray-700">Sozialer Einfluss:</strong> 
+                        <span class="text-lg font-medium {{ 'text-green-600' if user_readiness_details.social_influence == 'hoch' else ('text-yellow-600' if user_readiness_details.social_influence == 'mittel' else 'text-red-600') }}">
                             {{ user_readiness_details.social_influence|title }}
                         </span>
                     </div>
-                    <div class="detail-item">
-                        <strong>Unterstützende Bedingungen:</strong> 
-                        <span class="detail-value score-{{ user_readiness_details.facilitating_conditions }}">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <strong class="block text-gray-700">Unterstützende Bedingungen:</strong> 
+                        <span class="text-lg font-medium {{ 'text-green-600' if user_readiness_details.facilitating_conditions == 'hoch' else ('text-yellow-600' if user_readiness_details.facilitating_conditions == 'mittel' else 'text-red-600') }}">
                             {{ user_readiness_details.facilitating_conditions|title }}
                         </span>
                     </div>
-                    <div class="detail-item">
-                        <strong>Vertrauen in Technologie:</strong> 
-                        <span class="detail-value score-{{ user_readiness_details.trust_in_tech }}">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <strong class="block text-gray-700">Vertrauen in Technologie:</strong> 
+                        <span class="text-lg font-medium {{ 'text-green-600' if user_readiness_details.trust_in_tech == 'hoch' else ('text-yellow-600' if user_readiness_details.trust_in_tech == 'mittel' else 'text-red-600') }}">
                             {{ user_readiness_details.trust_in_tech|title }}
                         </span>
                     </div>
-                    <div class="detail-item">
-                        <strong>Wahrgenommene Bedrohung:</strong> 
-                        <span class="detail-value score-{{ user_readiness_details.perceived_threat }}">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <strong class="block text-gray-700">Wahrgenommene Bedrohung:</strong> 
+                        <span class="text-lg font-medium {{ 'text-green-600' if user_readiness_details.perceived_threat == 'hoch' else ('text-yellow-600' if user_readiness_details.perceived_threat == 'mittel' else 'text-red-600') }}">
                             {{ user_readiness_details.perceived_threat|title }}
                         </span>
                     </div>
@@ -233,15 +259,15 @@
         </div>
 
         <!-- Save/Login Section -->
-        <div class="save-section">
+        <div class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 mb-8 text-center">
             {% if session.get('user_id') %}
-                <a href="{{ url_for('saved_calculations') }}" class="action-button">
-                    <span class="action-button-icon">💾</span>
+                <a href="{{ url_for('saved_calculations') }}" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 md:py-4 md:text-lg md:px-8 shadow-md">
+                    <span class="mr-2 text-xl">💾</span>
                     <span>Gespeicherte Berechnungen</span>
                 </a>
             {% else %}
-                <a href="{{ url_for('login') }}" class="action-button">
-                    <span class="action-button-icon">🔐</span>
+                <a href="{{ url_for('login') }}" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 md:py-4 md:text-lg md:px-8 shadow-md">
+                    <span class="mr-2 text-xl">🔐</span>
                     <span>Anmelden zum Speichern</span>
                 </a>
             {% endif %}
@@ -249,150 +275,43 @@
     </div>
 
     <script>
-        // Initialize score visualization
+        // Set score color based on value
         document.addEventListener('DOMContentLoaded', function() {
-            // Get scores from template
             const totalScore = parseFloat('{{ total_score }}');
-            const technikScore = parseFloat('{{ technik_score }}');
-            const kpiScore = parseFloat('{{ kpi_score }}');
-            const userScore = parseFloat('{{ user_score }}');
+            const scoreElement = document.querySelector('.score-decimal');
             
-            // Animate score circle
-            const scoreCircle = document.querySelector('.score-circle-fill');
-            if (scoreCircle) {
-                setTimeout(() => {
-                    const angle = Math.round(totalScore * 360);
-                    scoreCircle.style.setProperty('--score-angle', angle + 'deg');
-                }, 500);
-            }
-
-            // Animate progress bars
-            const progressBars = document.querySelectorAll('.subscore-bar');
-            progressBars.forEach((bar, index) => {
-                setTimeout(() => {
-                    const width = bar.getAttribute('data-width');
-                    bar.style.width = width + '%';
-                }, 800 + (index * 200));
-            });
-
-            // Set score class based on total score
-            const scoreCard = document.querySelector('.score-hero-card');
-            let scoreClass = 'score-bad';
-            
-            if (totalScore >= 0.8) scoreClass = 'score-excellent';
-            else if (totalScore >= 0.6) scoreClass = 'score-good';
-            else if (totalScore >= 0.4) scoreClass = 'score-average';
-            else if (totalScore >= 0.2) scoreClass = 'score-poor';
-            
-            scoreCard.classList.add(scoreClass);
-        });
-
-        // Toggle collapsible sections
-        function toggleDetails(sectionId) {
-            const section = document.getElementById(sectionId);
-            section.classList.toggle('expanded');
-        }
-
-        // Download report functionality
-        function downloadReport() {
-            // Create a simple report
-            const reportData = {
-                timestamp: new Date().toISOString(),
-                total_score: parseFloat('{{ total_score }}'),
-                technik_score: parseFloat('{{ technik_score }}'),
-                kpi_score: parseFloat('{{ kpi_score }}'),
-                user_score: parseFloat('{{ user_score }}'),
-                weights: {
-                    technik: parseFloat('{{ technik_weight }}'),
-                    kpi: parseFloat('{{ kpi_weight }}'),
-                    user: parseFloat('{{ user_weight }}')
+            if (scoreElement) {
+                if (totalScore < 0.4) {
+                    scoreElement.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                } else if (totalScore < 0.7) {
+                    scoreElement.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+                } else {
+                    scoreElement.style.background = 'linear-gradient(135deg, #10b981, #059669)';
                 }
-            };
-            
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reportData, null, 2));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "effic-io-report.json");
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
-        }
-
-        // Feedback functionality
-        function giveFeedback() {
-            const feedback = prompt('Ihr Feedback zu effic.io:');
-            if (feedback) {
-                alert('Vielen Dank für Ihr Feedback! Wir werden es zur Verbesserung unserer Plattform nutzen.');
-                // Here you could send the feedback to your backend
-                console.log('Feedback:', feedback);
             }
+        });
+        
+        function toggleDetails(sectionId) {
+            const content = document.getElementById(sectionId + '-content');
+            const toggle = document.getElementById(sectionId + '-toggle');
+            
+            if (content.classList.contains('details-expanded')) {
+                content.classList.remove('details-expanded');
+                content.style.maxHeight = '0';
+                if (toggle) toggle.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('details-expanded');
+                content.style.maxHeight = content.scrollHeight + 'px';
+                if (toggle) toggle.style.transform = 'rotate(180deg)';
+            }
+        }
+        
+        function downloadReport() {
+            alert('Download-Funktion wird bald verfügbar sein!');
+        }
+        
+        function giveFeedback() {
+            alert('Feedback-Funktion wird bald verfügbar sein!');
         }
     </script>
-
-    <style>
-        /* Additional styles for detail sections */
-        .detail-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .detail-item {
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 12px;
-            border-left: 4px solid #667eea;
-        }
-        
-        .detail-value {
-            font-weight: 600;
-            margin-left: 10px;
-        }
-        
-        .detail-value.positive {
-            color: #4CAF50;
-        }
-        
-        .detail-value.negative {
-            color: #F44336;
-        }
-        
-        .detail-value.score-hoch {
-            color: #4CAF50;
-        }
-        
-        .detail-value.score-mittel {
-            color: #FFC107;
-        }
-        
-        .detail-value.score-niedrig {
-            color: #F44336;
-        }
-        
-        .kpi-summary {
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 12px;
-            border-left: 4px solid #f5576c;
-        }
-        
-        .kpi-interpretation {
-            margin-top: 15px;
-            font-style: italic;
-            color: #6c757d;
-        }
-        
-        .save-section {
-            text-align: center;
-            margin-top: 30px;
-        }
-        
-        @media (max-width: 768px) {
-            .detail-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-</body>
-</html>
+{% endblock %}

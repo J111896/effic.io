@@ -461,12 +461,14 @@ def process_technik():
     
     # Speichere die Technik-Bewertung in der Session
     session['technik_evaluation'] = {
-        'concept_status': concept_status,
-        'validation': validation,
-        'prototype': prototype,
-        'integration': integration,
-        'maturity': maturity,
-        'technik_score': technik_score
+        'technik_score': technik_score,
+        'details': {
+            'concept': concept_status,
+            'validation': validation,
+            'prototype': prototype,
+            'integration': integration,
+            'maturity': maturity
+        }
     }
     
     # Weiterleitung zur KPI-Bewertung
@@ -625,74 +627,10 @@ def calculate_result():
     
     return total_score
 
+
+
 @app.route('/result')
 def result():
-    print("\n=== RESULT ROUTE DEBUG (ENHANCED) ===\n")
-    
-    # Get the calculation from the session
-    calculation = session.get('calculation', {})
-    print(f"Retrieved calculation from session: {calculation}")
-    
-    # Extract scores
-    total_score = calculation.get('total_score', 0.0)
-    technik_score = calculation.get('technik_score', 0.0)
-    kpi_score = calculation.get('kpi_score', 0.5)  # Default to 0.5 if not found
-    user_score = calculation.get('user_score', 0.5)  # Default to 0.5 if not found
-    
-    print(f"Extracted scores: total={total_score}, technik={technik_score}, kpi={kpi_score}, user={user_score}")
-    
-    # Format scores as percentages for display
-    total_score_percent = f"{total_score * 100:.1f}%"
-    technik_score_percent = f"{technik_score * 100:.1f}%"
-    kpi_score_percent = f"{kpi_score * 100:.1f}%"
-    user_score_percent = f"{user_score * 100:.1f}%"
-    
-    # Determine status based on total score
-    if total_score >= 0.7:
-        status = "Gut"
-        recommendation = "Die Technologie ist reif und die KPIs sind vielversprechend. Eine Implementierung wird empfohlen."
-    elif total_score >= 0.4:
-        status = "Mittel"
-        recommendation = "Die Technologie und KPIs zeigen Potenzial, aber es gibt noch Verbesserungsbedarf. Eine Pilotimplementierung könnte sinnvoll sein."
-    else:
-        status = "Schlecht"
-        recommendation = "Die Technologie ist noch nicht reif genug oder die KPIs sind nicht überzeugend. Es wird empfohlen, die Implementierung zu verschieben."
-    
-    print(f"Status: {status}, Recommendation: {recommendation}")
-    
-    # Get technical details
-    technik_details = calculation.get('technik_details', {})
-    print(f"Technical details: {technik_details}")
-    
-    # Get selected KPIs
-    selected_kpis = calculation.get('selected_kpis', [])
-    print(f"Selected KPIs: {selected_kpis}")
-    
-    # Get user readiness score and details
-    user_score = calculation.get('user_score', 0.0)
-    user_readiness_details = calculation.get('user_readiness_details', {})
-    print(f"User score: {user_score}")
-    print(f"User readiness details: {user_readiness_details}")
-    
-    # Render the result template with all the data
-    return render_template('result.html',
-                          total_score=total_score,
-                          total_score_percent=total_score_percent,
-                          technik_score=technik_score,
-                          technik_score_percent=technik_score_percent,
-                          kpi_score=kpi_score,
-                          kpi_score_percent=kpi_score_percent,
-                          user_score=user_score,
-                          user_score_percent=int(user_score * 100),
-                          status=status,
-                          recommendation=recommendation,
-                          technik_details=technik_details,
-                          selected_kpis=selected_kpis,
-                          user_readiness_details=user_readiness_details,
-                          calculation=calculation)
-
-@app.route('/result-redesigned')
-def result_redesigned():
     print("\n=== RESULT REDESIGNED ROUTE DEBUG ===\n")
     
     # Get the calculation from the session
@@ -759,13 +697,14 @@ def result_redesigned():
                           score_description=score_description,
                           score_class=score_class,
                           technik_details=technik_details,
-                          user_readiness_details=user_readiness_details)
+                          user_readiness_details=user_readiness_details,
+                          selected_kpis=calculation.get('selected_kpis', []))
 
 @app.route('/save_calculation', methods=['POST'])
 @login_required
 def save_calculation():
     # Überprüfen, ob eine Berechnung vorhanden ist
-    if 'last_calculation' not in session:
+    if 'calculation' not in session:
         flash('Keine Berechnung zum Speichern vorhanden!')
         return redirect(url_for('index'))
     
@@ -780,7 +719,7 @@ def save_calculation():
     cursor = conn.cursor()
     cursor.execute(
         "INSERT INTO calculations (user_id, name, date, data) VALUES (?, ?, ?, ?)",
-        (current_user.id, calculation_name, current_date, json.dumps(session['last_calculation']))
+        (current_user.id, calculation_name, current_date, json.dumps(session['calculation']))
     )
     conn.commit()
     conn.close()
